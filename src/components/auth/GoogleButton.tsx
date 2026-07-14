@@ -3,20 +3,43 @@
 import { useState } from "react";
 
 import { createClient } from "@/lib/supabase/client";
+import {
+  AUTH_NOT_CONFIGURED_MESSAGE,
+  isSupabaseConfigured,
+} from "@/lib/supabase/env";
 
 export function GoogleButton({ next = "/" }: { next?: string }) {
   const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
 
   async function signInWithGoogle() {
     setError(null);
-    const supabase = createClient();
-    const { error: authError } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
-      },
-    });
-    if (authError) setError(authError.message);
+    setPending(true);
+    try {
+      if (!isSupabaseConfigured()) {
+        setError(AUTH_NOT_CONFIGURED_MESSAGE);
+        return;
+      }
+      const supabase = createClient();
+      const { error: authError } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+        },
+      });
+      if (authError) setError(authError.message);
+    } catch (err) {
+      console.error("Google sign-in failed:", err);
+      setError(
+        err instanceof Error && err.message
+          ? err.message
+          : "Something went wrong starting Google sign-in. Please try again.",
+      );
+    } finally {
+      // On success the browser navigates away to Google moments later;
+      // re-enabling briefly is harmless and guarantees no frozen button.
+      setPending(false);
+    }
   }
 
   return (
@@ -24,7 +47,8 @@ export function GoogleButton({ next = "/" }: { next?: string }) {
       <button
         type="button"
         onClick={signInWithGoogle}
-        className="flex w-full items-center justify-center gap-2 rounded-xl border border-line bg-card px-4 py-3 font-semibold hover:border-ink-soft"
+        disabled={pending}
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-line bg-card px-4 py-3 font-semibold disabled:opacity-60"
       >
         <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5">
           <path
@@ -47,7 +71,10 @@ export function GoogleButton({ next = "/" }: { next?: string }) {
         Continue with Google
       </button>
       {error && (
-        <p role="alert" className="mt-2 text-sm text-primary-strong">
+        <p
+          role="alert"
+          className="mt-2 rounded-xl bg-primary-soft px-4 py-3 text-sm font-medium text-primary-strong"
+        >
           {error}
         </p>
       )}

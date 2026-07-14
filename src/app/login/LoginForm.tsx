@@ -5,6 +5,10 @@ import { useState } from "react";
 
 import { GoogleButton } from "@/components/auth/GoogleButton";
 import { createClient } from "@/lib/supabase/client";
+import {
+  AUTH_NOT_CONFIGURED_MESSAGE,
+  isSupabaseConfigured,
+} from "@/lib/supabase/env";
 
 export function LoginForm() {
   const router = useRouter();
@@ -24,20 +28,35 @@ export function LoginForm() {
     setError(null);
     setPending(true);
 
-    const supabase = createClient();
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      if (!isSupabaseConfigured()) {
+        setError(AUTH_NOT_CONFIGURED_MESSAGE);
+        return;
+      }
 
-    if (authError) {
-      setError(authError.message);
+      const supabase = createClient();
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (authError) {
+        setError(authError.message);
+        return;
+      }
+
+      router.push(next);
+      router.refresh();
+    } catch (err) {
+      console.error("Log-in failed:", err);
+      setError(
+        err instanceof Error && err.message
+          ? err.message
+          : "Something went wrong while logging in. Please try again.",
+      );
+    } finally {
       setPending(false);
-      return;
     }
-
-    router.push(next);
-    router.refresh();
   }
 
   return (
@@ -66,7 +85,10 @@ export function LoginForm() {
           />
         </label>
         {error && (
-          <p role="alert" className="text-sm text-primary-strong">
+          <p
+            role="alert"
+            className="rounded-xl bg-primary-soft px-4 py-3 text-sm font-medium text-primary-strong"
+          >
             {error}
           </p>
         )}

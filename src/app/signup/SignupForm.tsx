@@ -5,6 +5,10 @@ import { useState } from "react";
 
 import { GoogleButton } from "@/components/auth/GoogleButton";
 import { createClient } from "@/lib/supabase/client";
+import {
+  AUTH_NOT_CONFIGURED_MESSAGE,
+  isSupabaseConfigured,
+} from "@/lib/supabase/env";
 
 export function SignupForm() {
   const router = useRouter();
@@ -23,31 +27,45 @@ export function SignupForm() {
     setError(null);
     setPending(true);
 
-    const supabase = createClient();
-    const { data, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { display_name: displayName.trim() },
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
-      },
-    });
+    try {
+      if (!isSupabaseConfigured()) {
+        setError(AUTH_NOT_CONFIGURED_MESSAGE);
+        return;
+      }
 
-    if (authError) {
-      setError(authError.message);
+      const supabase = createClient();
+      const { data, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { display_name: displayName.trim() },
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+        },
+      });
+
+      if (authError) {
+        setError(authError.message);
+        return;
+      }
+
+      // With email confirmation enabled, no session is returned yet.
+      if (!data.session) {
+        setAwaitingConfirmation(true);
+        return;
+      }
+
+      router.push(next);
+      router.refresh();
+    } catch (err) {
+      console.error("Sign-up failed:", err);
+      setError(
+        err instanceof Error && err.message
+          ? err.message
+          : "Something went wrong while creating your account. Please try again.",
+      );
+    } finally {
       setPending(false);
-      return;
     }
-
-    // With email confirmation enabled, no session is returned yet.
-    if (!data.session) {
-      setAwaitingConfirmation(true);
-      setPending(false);
-      return;
-    }
-
-    router.push(next);
-    router.refresh();
   }
 
   if (awaitingConfirmation) {
@@ -108,7 +126,10 @@ export function SignupForm() {
           />
         </label>
         {error && (
-          <p role="alert" className="text-sm text-primary-strong">
+          <p
+            role="alert"
+            className="rounded-xl bg-primary-soft px-4 py-3 text-sm font-medium text-primary-strong"
+          >
             {error}
           </p>
         )}
