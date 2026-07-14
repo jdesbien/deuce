@@ -4,8 +4,9 @@ import { useState } from "react";
 
 import { completedDeals, playerTotals } from "@/lib/scoring/engine";
 import {
-  EditableName,
-  PLAYER_STYLES,
+  PlayerCard,
+  ScoreDisplay,
+  useFloatingDeltas,
   type BoardProps,
 } from "@/components/scorekeeper/parts";
 
@@ -26,17 +27,17 @@ export function PartieBoard({
   const dealsDone = completedDeals(entries);
   const currentDeal = Math.min(dealsDone + 1, dealsTotal);
   const finished = outcome.finished || dealsDone >= dealsTotal;
+  const { deltas, pushDelta } = useFloatingDeltas();
 
-  const [dealScores, setDealScores] = useState<["", ""] | [string, string]>([
-    "",
-    "",
-  ]);
+  const [dealScores, setDealScores] = useState<[string, string]>(["", ""]);
 
   function recordDeal() {
     const values = dealScores.map((raw) => Number(raw));
     if (values.some((v) => !Number.isFinite(v) || v < 0)) return;
     addEntry({ player: 0, value: Math.trunc(values[0]), deal: currentDeal });
     addEntry({ player: 1, value: Math.trunc(values[1]), deal: currentDeal });
+    pushDelta(0, `+${Math.trunc(values[0])}`);
+    pushDelta(1, `+${Math.trunc(values[1])}`);
     setDealScores(["", ""]);
   }
 
@@ -44,34 +45,31 @@ export function PartieBoard({
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-center text-sm font-semibold">
-        {finished ? `All ${dealsTotal} deals played` : `Deal ${currentDeal} of ${dealsTotal}`}
+      <p className="text-center text-sm font-semibold text-white/90">
+        {finished
+          ? `All ${dealsTotal} deals played`
+          : `Deal ${currentDeal} of ${dealsTotal}`}
       </p>
 
       <div className="grid grid-cols-2 gap-3">
         {([0, 1] as const).map((player) => {
-          const style = PLAYER_STYLES[player];
           const nearRubicon = totals[player] < 100;
           return (
-            <section
+            <PlayerCard
               key={player}
-              aria-label={`${names[player]} partie score`}
-              className={`flex flex-col gap-3 rounded-2xl border-t-4 ${style.ring} border-x border-b border-x-line border-b-line bg-card p-3`}
+              player={player}
+              name={names[player]}
+              onName={(name) => setName(player, name)}
+              ariaLabel={`${names[player]} partie score`}
             >
-              <EditableName
-                name={names[player]}
-                onChange={(name) => setName(player, name)}
-                align="left"
+              <ScoreDisplay
+                player={player}
+                value={totals[player]}
+                label={`${config.unit.split(" ")[0]}${
+                  nearRubicon ? " · under the 100 rubicon" : ""
+                }`}
+                deltas={deltas}
               />
-              <p
-                className={`text-center text-5xl font-bold tabular-nums ${style.text}`}
-              >
-                {totals[player]}
-              </p>
-              <p className="-mt-2 text-center text-xs text-ink-soft">
-                {config.unit.split(" ")[0]}
-                {nearRubicon ? " · under the 100 rubicon" : ""}
-              </p>
               <label className="flex flex-col gap-1 text-xs font-medium text-ink-soft">
                 This deal
                 <input
@@ -91,7 +89,7 @@ export function PartieBoard({
                   className="h-14 rounded-xl border border-line bg-card px-3 text-center text-xl font-bold outline-none focus:border-ink-soft disabled:opacity-40"
                 />
               </label>
-            </section>
+            </PlayerCard>
           );
         })}
       </div>
@@ -100,7 +98,7 @@ export function PartieBoard({
         type="button"
         onClick={recordDeal}
         disabled={finished || !bothFilled}
-        className="h-14 rounded-xl bg-ink text-lg font-bold text-white disabled:opacity-40"
+        className="h-14 rounded-xl bg-card text-lg font-bold text-primary-strong shadow-sm disabled:opacity-40"
       >
         Record deal {currentDeal}
       </button>

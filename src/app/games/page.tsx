@@ -20,8 +20,14 @@ export default function GamesPage() {
       </p>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {games.map((game) => (
-          <GameCard key={game.id} game={game} />
+        {games.map((game, i) => (
+          <div
+            key={game.id}
+            className="animate-deal-in"
+            style={{ animationDelay: `${Math.min(i * 45, 500)}ms` }}
+          >
+            <GameCard game={game} />
+          </div>
         ))}
       </div>
 

@@ -9,9 +9,12 @@ export function Header() {
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-2 px-3 sm:px-4">
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-1.5 text-base font-bold tracking-tight sm:text-lg"
+          className="group flex shrink-0 items-center gap-1.5 text-base font-bold tracking-tight sm:text-lg"
         >
-          <span aria-hidden className="text-suit">
+          <span
+            aria-hidden
+            className="inline-block text-suit group-hover:animate-heartbeat"
+          >
             {brand.logoGlyph}
           </span>
           {brand.name}

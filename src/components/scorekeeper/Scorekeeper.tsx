@@ -165,14 +165,27 @@ export function Scorekeeper({
 
       <WinnerBanner outcome={outcome} names={names} onRematch={handleReset} />
 
-      <Board
-        config={config}
-        names={names}
-        entries={entries}
-        outcome={outcome}
-        addEntry={addEntry}
-        setName={setName}
-      />
+      {/* The table: a rosewood surface the player cards lie on. */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-primary to-primary-strong p-3 shadow-lg sm:p-4">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,0.14), transparent 55%)",
+          }}
+        />
+        <div className="relative">
+          <Board
+            config={config}
+            names={names}
+            entries={entries}
+            outcome={outcome}
+            addEntry={addEntry}
+            setName={setName}
+          />
+        </div>
+      </div>
 
       <BoardActions
         onUndo={undo}

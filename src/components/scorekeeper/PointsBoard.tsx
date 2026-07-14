@@ -1,10 +1,12 @@
 "use client";
 
-import { displayTotals, type PlayerIndex } from "@/lib/scoring/engine";
+import { displayTotals } from "@/lib/scoring/engine";
 import {
   CustomAmount,
-  EditableName,
+  PlayerCard,
   PLAYER_STYLES,
+  ScoreDisplay,
+  useFloatingDeltas,
   type BoardProps,
 } from "@/components/scorekeeper/parts";
 
@@ -22,96 +24,80 @@ export function PointsBoard({
 }: BoardProps) {
   const totals = displayTotals(config, entries);
   const finished = outcome.finished;
+  const { deltas, pushDelta } = useFloatingDeltas();
 
   return (
     <div className="grid grid-cols-2 gap-3">
-      {([0, 1] as const).map((player) => (
-        <PlayerColumn
-          key={player}
-          player={player}
-          name={names[player]}
-          total={totals[player]}
-          config={config}
-          disabled={finished}
-          onName={(name) => setName(player, name)}
-          onAdd={(value) => addEntry({ player, value })}
-        />
-      ))}
-    </div>
-  );
-}
+      {([0, 1] as const).map((player) => {
+        const style = PLAYER_STYLES[player];
+        const total = totals[player];
+        const progress =
+          config.target !== null && config.target > 0
+            ? Math.min(100, (total / config.target) * 100)
+            : null;
 
-function PlayerColumn({
-  player,
-  name,
-  total,
-  config,
-  disabled,
-  onName,
-  onAdd,
-}: {
-  player: PlayerIndex;
-  name: string;
-  total: number;
-  config: BoardProps["config"];
-  disabled: boolean;
-  onName: (name: string) => void;
-  onAdd: (value: number) => void;
-}) {
-  const style = PLAYER_STYLES[player];
-  const progress =
-    config.target !== null && config.target > 0
-      ? Math.min(100, (total / config.target) * 100)
-      : null;
+        function add(value: number) {
+          addEntry({ player, value });
+          pushDelta(player, value > 0 ? `+${value}` : `${value}`);
+        }
 
-  return (
-    <section
-      aria-label={`${name} score`}
-      className={`flex flex-col gap-3 rounded-2xl border-t-4 ${style.ring} border-x border-b border-x-line border-b-line bg-card p-3`}
-    >
-      <EditableName name={name} onChange={onName} align="left" />
-
-      <p className={`text-center text-5xl font-bold tabular-nums ${style.text}`}>
-        {total}
-      </p>
-      <p className="-mt-2 text-center text-xs text-ink-soft">
-        {config.counterLabel}
-        {config.target !== null && config.targetMode !== "none"
-          ? ` · ${config.lowIsGood ? "limit" : "target"} ${config.target}`
-          : ""}
-      </p>
-
-      {progress !== null && (
-        <div
-          role="progressbar"
-          aria-valuenow={Math.round(progress)}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          className="h-1.5 overflow-hidden rounded-full bg-line"
-        >
-          <div
-            className={`h-full rounded-full ${config.lowIsGood ? "bg-gold" : style.button.split(" ")[0]}`}
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      )}
-
-      <div className="grid grid-cols-2 gap-2">
-        {config.quickValues.map((value) => (
-          <button
-            key={value}
-            type="button"
-            disabled={disabled}
-            onClick={() => onAdd(value)}
-            aria-label={`Add ${value} ${config.unit} to ${name}`}
-            className={`h-14 rounded-xl text-lg font-bold text-white disabled:opacity-40 ${style.button}`}
+        return (
+          <PlayerCard
+            key={player}
+            player={player}
+            name={names[player]}
+            onName={(name) => setName(player, name)}
+            ariaLabel={`${names[player]} score`}
           >
-            +{value}
-          </button>
-        ))}
-      </div>
+            <ScoreDisplay
+              player={player}
+              value={total}
+              label={`${config.counterLabel}${
+                config.target !== null && config.targetMode !== "none"
+                  ? ` · ${config.lowIsGood ? "limit" : "target"} ${config.target}`
+                  : ""
+              }`}
+              deltas={deltas}
+            />
 
-      {config.allowCustom && <CustomAmount onAdd={onAdd} disabled={disabled} />}
-    </section>
+            {progress !== null && (
+              <div
+                role="progressbar"
+                aria-valuenow={Math.round(progress)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                className="h-1.5 overflow-hidden rounded-full bg-line"
+              >
+                <div
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    config.lowIsGood ? "bg-gold" : style.button.split(" ")[0]
+                  }`}
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            )}
+
+            <div className="grid grid-cols-2 gap-2">
+              {config.quickValues.map((value) => (
+                <button
+                  key={value}
+                  type="button"
+                  disabled={finished}
+                  onClick={() => add(value)}
+                  aria-label={`Add ${value} ${config.unit} to ${names[player]}`}
+                  className={`h-14 rounded-xl text-lg font-bold text-white shadow-sm disabled:opacity-40 ${style.button}`}
+                >
+                  +{value}
+                </button>
+              ))}
+            </div>
+
+            {config.allowCustom && (
+              <CustomAmount onAdd={add} disabled={finished} />
+            )}
+          </PlayerCard>
+        );
+      })}
+    </div>
   );
 }
