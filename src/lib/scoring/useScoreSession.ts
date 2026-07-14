@@ -110,6 +110,15 @@ export function useScoreSession(slug: string, config: ScorekeeperConfig) {
     });
   }, []);
 
+  /** Wholesale replace (cloud sync adopting a remote session). */
+  const replaceEntries = useCallback((entries: ScoreEntry[]) => {
+    setState((current) => ({ ...current, entries }));
+  }, []);
+
+  const replaceNames = useCallback((names: [string, string]) => {
+    setState((current) => ({ ...current, names }));
+  }, []);
+
   return {
     ready: state.ready,
     names: state.names,
@@ -118,5 +127,7 @@ export function useScoreSession(slug: string, config: ScorekeeperConfig) {
     undo,
     reset,
     setName,
+    replaceEntries,
+    replaceNames,
   };
 }

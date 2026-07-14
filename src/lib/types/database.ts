@@ -129,7 +129,7 @@ export interface Database {
       sessions: {
         Row: {
           id: string;
-          game_id: string;
+          game_slug: string;
           couple_id: string | null;
           created_by: string | null;
           player1_name: string;
@@ -142,7 +142,7 @@ export interface Database {
         };
         Insert: {
           id?: string;
-          game_id: string;
+          game_slug: string;
           couple_id?: string | null;
           created_by?: string | null;
           player1_name?: string;
@@ -155,7 +155,7 @@ export interface Database {
         };
         Update: {
           id?: string;
-          game_id?: string;
+          game_slug?: string;
           couple_id?: string | null;
           created_by?: string | null;
           player1_name?: string;

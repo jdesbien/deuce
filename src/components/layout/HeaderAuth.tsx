@@ -72,24 +72,23 @@ export function HeaderAuth() {
 
   if (state.status === "authed") {
     return (
-      <div className="flex items-center gap-1 sm:gap-2">
-        <span
-          className="max-w-28 truncate rounded-lg px-2 py-2 text-sm font-medium sm:max-w-40"
-          title={state.profile.display_name}
+      <div className="flex items-center gap-0.5 sm:gap-2">
+        <Link
+          href="/streak"
+          className="whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium text-ink-soft hover:bg-primary-soft hover:text-ink sm:px-3"
+        >
+          Streak
+        </Link>
+        <Link
+          href="/settings"
+          className="flex max-w-24 items-center truncate rounded-lg px-2 py-2 text-sm font-medium hover:bg-primary-soft sm:max-w-40"
+          title={`${state.profile.display_name} — settings`}
         >
           <span aria-hidden className="mr-1">
             {state.profile.avatar_emoji}
           </span>
-          {state.profile.display_name}
-        </span>
-        <form action="/auth/signout" method="post">
-          <button
-            type="submit"
-            className="rounded-lg px-3 py-2 text-sm font-medium text-ink-soft hover:bg-primary-soft hover:text-ink"
-          >
-            Sign out
-          </button>
-        </form>
+          <span className="truncate">{state.profile.display_name}</span>
+        </Link>
       </div>
     );
   }

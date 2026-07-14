@@ -13,12 +13,8 @@ import {
   type BoardProps,
 } from "@/components/scorekeeper/parts";
 import type { GameScoring } from "@/lib/content/types";
-import {
-  evaluateOutcome,
-  getScorekeeperConfig,
-  type BoardKind,
-} from "@/lib/scoring/engine";
-import { useScoreSession } from "@/lib/scoring/useScoreSession";
+import { getScorekeeperConfig, type BoardKind } from "@/lib/scoring/engine";
+import { useSyncedScoreSession } from "@/lib/scoring/useSyncedScoreSession";
 
 const BOARDS: Record<BoardKind, (props: BoardProps) => React.ReactNode> = {
   points: PointsBoard,
@@ -38,12 +34,17 @@ export function Scorekeeper({
     () => getScorekeeperConfig(slug, scoring),
     [slug, scoring],
   );
-  const { ready, names, entries, addEntry, undo, reset, setName } =
-    useScoreSession(slug, config);
-  const outcome = useMemo(
-    () => evaluateOutcome(config, entries),
-    [config, entries],
-  );
+  const {
+    ready,
+    names,
+    entries,
+    outcome,
+    sync,
+    addEntry,
+    undo,
+    reset,
+    setName,
+  } = useSyncedScoreSession(slug, config);
 
   if (!ready) {
     return (
@@ -61,6 +62,17 @@ export function Scorekeeper({
       <p className="rounded-xl bg-gold-soft px-4 py-2.5 text-center text-sm font-medium">
         {config.hint}
       </p>
+
+      {sync.mode !== "guest" && (
+        <p
+          role="status"
+          className="rounded-xl bg-accent-soft px-4 py-2 text-center text-xs font-semibold text-accent-strong"
+        >
+          {sync.mode === "shared"
+            ? `♥ Live with ${sync.partnerName} — scores sync to both phones`
+            : "Saving to your history"}
+        </p>
+      )}
 
       <WinnerBanner outcome={outcome} names={names} onRematch={reset} />
 
