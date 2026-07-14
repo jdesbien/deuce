@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import { GoogleButton } from "@/components/auth/GoogleButton";
+import { features } from "@/config/features";
 import { createClient } from "@/lib/supabase/client";
 import {
   AUTH_NOT_CONFIGURED_MESSAGE,
@@ -142,13 +143,16 @@ export function SignupForm() {
         </button>
       </form>
 
-      <div className="flex items-center gap-3 text-xs text-ink-soft">
-        <span className="h-px flex-1 bg-line" />
-        or
-        <span className="h-px flex-1 bg-line" />
-      </div>
-
-      <GoogleButton next={next} />
+      {features.googleAuth && (
+        <>
+          <div className="flex items-center gap-3 text-xs text-ink-soft">
+            <span className="h-px flex-1 bg-line" />
+            or
+            <span className="h-px flex-1 bg-line" />
+          </div>
+          <GoogleButton next={next} />
+        </>
+      )}
     </div>
   );
 }
