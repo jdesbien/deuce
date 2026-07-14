@@ -17,6 +17,19 @@ export async function getFinishedSessions(limit = 100): Promise<GameSession[]> {
   return data;
 }
 
+/** Unfinished sessions (games in progress), newest first. */
+export async function getActiveSessions(limit = 3): Promise<GameSession[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("sessions")
+    .select("*")
+    .is("ended_at", null)
+    .order("started_at", { ascending: false })
+    .limit(limit);
+  if (error) return [];
+  return data;
+}
+
 /** Finished sessions belonging to a couple, newest first. */
 export async function getCoupleSessions(
   coupleId: string,

@@ -2,6 +2,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { getGame } from "@/lib/content/games";
+import {
+  computeBadges,
+  computeCoupleStats,
+  sortBadgesForDisplay,
+} from "@/lib/engagement/badges";
 import { getPartnerProfile } from "@/lib/queries/couples";
 import { getCoupleSessions } from "@/lib/queries/sessions";
 import { getCurrentUser } from "@/lib/queries/profiles";
@@ -110,6 +115,12 @@ export default async function StreakPage() {
     (a, b) => b[1].total - a[1].total,
   );
 
+  const badges = sortBadgesForDisplay(
+    computeBadges(computeCoupleStats(sessions)),
+  );
+  const earnedBadges = badges.filter((b) => b.earned);
+  const upcomingBadges = badges.filter((b) => !b.earned && b.progress);
+
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
       <h1 className="mb-1 text-2xl font-bold">
@@ -209,6 +220,65 @@ export default async function StreakPage() {
               <p className="mt-3 text-center text-sm text-ink-soft">
                 Most played: {getGame(gameRows[0][0])?.name ?? gameRows[0][0]} ♥
               </p>
+            )}
+          </section>
+
+          {/* Badges */}
+          <section className="rounded-2xl border border-line bg-card p-5">
+            <h2 className="mb-3 text-lg font-bold">
+              Badges{" "}
+              <span className="text-sm font-medium text-ink-soft">
+                {earnedBadges.length} of {badges.length}
+              </span>
+            </h2>
+
+            {earnedBadges.length > 0 && (
+              <ul className="mb-4 flex flex-col gap-2">
+                {earnedBadges.map((badge) => (
+                  <li
+                    key={badge.id}
+                    className="flex items-center gap-3 rounded-xl bg-gold-soft px-4 py-3"
+                  >
+                    <span aria-hidden className="text-2xl">
+                      {badge.emoji}
+                    </span>
+                    <div>
+                      <p className="font-semibold">{badge.name}</p>
+                      <p className="text-sm text-ink-soft">
+                        {badge.description}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {upcomingBadges.length > 0 && (
+              <div className="flex flex-col gap-3">
+                {upcomingBadges.map((badge) => (
+                  <div key={badge.id}>
+                    <p className="flex justify-between text-sm">
+                      <span className="font-medium">
+                        {badge.emoji} {badge.name}
+                        <span className="ml-2 text-ink-soft">
+                          {badge.description}
+                        </span>
+                      </span>
+                      <span className="shrink-0 text-ink-soft">
+                        {badge.progress?.current}/{badge.progress?.target}
+                      </span>
+                    </p>
+                    <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-line">
+                      <div
+                        className="h-full rounded-full bg-accent"
+                        style={{
+                          width: `${((badge.progress?.current ?? 0) / (badge.progress?.target ?? 1)) * 100}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </section>
 

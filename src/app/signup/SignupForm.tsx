@@ -14,7 +14,7 @@ import {
 export function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") ?? "/";
+  const next = searchParams.get("next") ?? "/dashboard";
 
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");

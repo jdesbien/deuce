@@ -42,6 +42,7 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const requiresAuth =
     pathname.startsWith("/admin") ||
+    pathname.startsWith("/dashboard") ||
     pathname.startsWith("/settings") ||
     pathname.startsWith("/history") ||
     pathname.startsWith("/streak");
@@ -50,6 +51,14 @@ export async function proxy(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("next", pathname);
+    return NextResponse.redirect(url);
+  }
+
+  // Signed-in users get their dashboard instead of the marketing page
+  // (which stays static for everyone else and for search engines).
+  if (user && pathname === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 

@@ -29,7 +29,7 @@ export default function HomePage() {
       {/* Hero */}
       <section className="flex flex-col items-center gap-6 py-16 text-center sm:py-24">
         <p className="rounded-full bg-accent-soft px-4 py-1.5 text-sm font-medium text-accent-strong">
-          Free · No signup needed to play
+          Free · First two games, no signup needed
         </p>
         <h1 className="max-w-2xl text-4xl font-bold tracking-tight sm:text-5xl">
           Put the phones down. Deal the cards.

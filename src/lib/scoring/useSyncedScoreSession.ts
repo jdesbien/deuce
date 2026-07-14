@@ -53,6 +53,13 @@ export function useSyncedScoreSession(slug: string, config: ScorekeeperConfig) {
   const { replaceEntries, replaceNames } = local;
 
   const [sync, setSync] = useState<SyncStatus>({ mode: "guest" });
+  // False until we know whether a user is signed in — gate UI on this to
+  // avoid flashing guest-only prompts at signed-in players. Without
+  // Supabase configured there's nothing to resolve (build-time constant,
+  // so server and client initial renders match).
+  const [authResolved, setAuthResolved] = useState(
+    () => !isSupabaseConfigured(),
+  );
   // Bumped on rematch to tear down and re-run adopt-or-create, so both
   // partners converge on one fresh session row instead of each making one.
   const [generation, setGeneration] = useState(0);
@@ -78,7 +85,11 @@ export function useSyncedScoreSession(slug: string, config: ScorekeeperConfig) {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (cancelled || !user) return;
+      if (cancelled) return;
+      if (!user) {
+        setAuthResolved(true);
+        return;
+      }
 
       const { data: me } = await supabase
         .from("profiles")
@@ -151,6 +162,7 @@ export function useSyncedScoreSession(slug: string, config: ScorekeeperConfig) {
           ? { mode: "shared", partnerName }
           : { mode: "solo" },
       );
+      setAuthResolved(true);
 
       // Partners subscribe to the same row; last write wins.
       if (me.couple_id) {
@@ -272,6 +284,7 @@ export function useSyncedScoreSession(slug: string, config: ScorekeeperConfig) {
     entries: local.entries,
     outcome,
     sync,
+    authResolved,
     addEntry: local.addEntry,
     undo: local.undo,
     reset,
