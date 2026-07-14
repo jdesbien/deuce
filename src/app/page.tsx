@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { GameCard } from "@/components/games/GameCard";
 import { brand } from "@/config/brand";
-import { getFeaturedGames } from "@/lib/queries/games";
+import { getFeaturedGames } from "@/lib/content/games";
 
 const steps = [
   {

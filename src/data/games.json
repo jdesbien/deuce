@@ -1,0 +1,990 @@
+{
+  "meta": {
+    "title": "Two-Player Card & Domino Games",
+    "description": "Rules, how-to-play, and scoring for the 20 recommended two-player games from pagat.com, rewritten in original wording for use in a learn-to-play + scorekeeping app.",
+    "gameCount": 20,
+    "sourceCredit": "Game mechanics sourced from pagat.com (editor John McLeod). Rules text here is an original re-expression; game rules themselves are not copyrightable, but pagat.com's specific wording is (c) John McLeod and is NOT reproduced. If publishing commercially, consider contacting pagat.com (https://www.pagat.com/policy.html).",
+    "scoringTypesUsed": [
+      "best-of-series",
+      "instant-win",
+      "match-countdown",
+      "partie-total",
+      "penalty-elimination",
+      "penalty-to-limit",
+      "running-total",
+      "stake-based",
+      "stop-or-go",
+      "win-loss"
+    ],
+    "schema": {
+      "id": "kebab-case unique key",
+      "name": "display name",
+      "aka": "array of alternate names",
+      "origin": "region/era string",
+      "difficulty": "1-5 (from pagat editor)",
+      "family": "game family/category",
+      "isDominoes": "present & true only for domino games",
+      "summary": "one-paragraph plain description",
+      "equipment": "what you need to play",
+      "objective": "the goal in one sentence",
+      "setup": "array of setup steps",
+      "play": "array of play steps",
+      "scoring": {
+        "type": "one of scoringTypesUsed - drives which scorekeeper UI to show",
+        "target": "number to reach, or null",
+        "unit": "what is being counted",
+        "...": "type-specific arrays: perHand / perRound / perDeal / duringPlay / etc."
+      },
+      "winning": "how the game/match is won",
+      "sourceUrl": "pagat.com reference"
+    },
+    "scorekeeperNotes": {
+      "running-total": "accumulate points across deals to a target (Gin, Cribbage, Escoba, Porrazo, All Fives, Casino, Tartli, Clobyosh)",
+      "win-loss": "no points; track games won / W-L record (James Bond, Spite & Malice*, Durak, Panjpar)",
+      "penalty-to-limit / penalty-elimination": "low score is good; eliminate/lose at a ceiling (Twenty, Yaniv)",
+      "match-countdown": "count game points down from a start value (Schnapsen)",
+      "stake-based": "award stakes per hand (Sedma)",
+      "instant-win / best-of-series / stop-or-go / partie-total": "special per-game logic (Cuttle, Ocean's Eleven, Go Stop, Piquet)",
+      "note": "Spite & Malice is win-loss with an optional point system included in its object"
+    }
+  },
+  "games": [
+    {
+      "id": "gin-rummy",
+      "name": "Gin Rummy",
+      "aka": [
+        "Gin"
+      ],
+      "origin": "USA, c. 1911",
+      "difficulty": 3,
+      "family": "Rummy (knock rummy)",
+      "summary": "A ten-card rummy for two where you form your hand into sets and runs, then end the hand by 'knocking' once your leftover cards are worth little, or hold out for a bonus 'gin'.",
+      "equipment": "One standard 52-card deck.",
+      "cardRanking": "Within a suit, low to high: A 2 3 4 5 6 7 8 9 10 J Q K. Ace is always low, so A-2-3 is a run but Q-K-A is not.",
+      "cardValues": "Face cards (K, Q, J) = 10 each. Ace = 1. Number cards = their face value.",
+      "objective": "Arrange your ten cards into melds (sets and runs) so the point value of your leftover unmatched cards, called deadwood, is as low as possible, then end the hand favorably.",
+      "melds": [
+        "Run (sequence): three or more cards of the same suit in consecutive order, e.g. 4-5-6 of clubs.",
+        "Set (group): three or four cards of the same rank, e.g. three sevens.",
+        "Any single card can be used in only one meld at a time."
+      ],
+      "setup": [
+        "Deal ten cards to each player, one at a time.",
+        "Turn the 21st card face up to start the discard pile; place the rest face down beside it as the stock.",
+        "First turn only: the non-dealer may take the face-up card, or decline. If declined, the dealer may take it. If both decline, the non-dealer draws the top stock card. That player then discards, and normal turns begin."
+      ],
+      "play": [
+        "On your turn, first draw one card, either the top of the stock (unseen) or the top of the discard pile (visible).",
+        "Then discard one card face up to the discard pile.",
+        "If you took the top discard, you must discard a different card that same turn (you may discard it on a later turn).",
+        "Turns alternate. You keep improving your hand toward low deadwood."
+      ],
+      "specialRules": [
+        "Knocking: on your turn, after drawing, if your deadwood totals 10 points or less you may end the hand. Discard one card face down, then lay out your hand arranged into melds with deadwood separate.",
+        "Going gin: knocking with zero deadwood (all ten cards melded) earns a bonus. A gin hand can never be undercut.",
+        "Laying off: when the knocker has NOT gone gin, the opponent may extend the knocker's melds with their own unmatched cards to reduce their deadwood. No lay-offs are allowed against a gin hand.",
+        "If the stock is reduced to two cards and the player who drew the third-from-last card discards without knocking, the hand is void (no score) and is redealt by the same dealer."
+      ],
+      "scoring": {
+        "type": "running-total",
+        "target": 100,
+        "unit": "points",
+        "perHand": [
+          "Each player totals the value of their unmatched (deadwood) cards.",
+          "If the knocker's deadwood is lower, the knocker scores the difference between the two counts.",
+          "Undercut: if the knocker did NOT go gin and the opponent's deadwood is equal or lower, the opponent scores the difference plus a 10-point bonus.",
+          "Gin: the player who went gin scores 20 points plus the opponent's full deadwood count."
+        ],
+        "endGameBonuses": [
+          "Game ends when a player's cumulative score reaches 100 or more.",
+          "That player adds a 100-point game bonus (200 if the opponent scored zero all game).",
+          "Each player adds a 20-point 'box'/'line' bonus for every hand they won (boxes do not count toward reaching 100).",
+          "Final margin is the difference between the two players' totals after bonuses."
+        ],
+        "commonVariants": [
+          "Gin bonus 25 and undercut bonus 20.",
+          "Oklahoma Gin: the up-card sets the maximum deadwood you may knock with; target often 150."
+        ]
+      },
+      "winning": "The first player to reach 100+ cumulative points ends the game and, after all bonuses, the player with the higher total wins.",
+      "sourceUrl": "https://www.pagat.com/rummy/ginrummy.html"
+    },
+    {
+      "id": "cribbage-six-card",
+      "name": "Cribbage (Six-Card)",
+      "aka": [
+        "Crib"
+      ],
+      "origin": "Britain, 17th century",
+      "difficulty": 3,
+      "family": "Adding games",
+      "summary": "The classic pub game: score points on a peg board for card combinations that make 15, pairs, runs and flushes, both during play and in your hand, with the dealer earning an extra hand called the crib.",
+      "equipment": "One standard 52-card deck, plus a cribbage board and pegs (or any way to track two scores up to 121).",
+      "cardRanking": "K (high) Q J 10 9 8 7 6 5 4 3 2 A (low). Ace is low for runs.",
+      "cardValues": "Ace = 1, 2-10 = face value, J/Q/K = 10 (for the counting-to-31 play and for making fifteens).",
+      "objective": "Be the first to peg 121 points, scored across many deals from combinations during the play and in the show.",
+      "setup": [
+        "Cut for first deal; lower card deals and takes the first crib. Deal alternates thereafter.",
+        "Dealer deals six cards to each player.",
+        "Each player discards two cards face down to form the crib (a four-card extra hand that scores for the dealer).",
+        "The non-dealer cuts the remaining deck and the dealer turns up the top card of the lower portion as the 'start' card. If it is a Jack, the dealer immediately pegs 2 ('two for his heels')."
+      ],
+      "play": [
+        "The Play phase: starting with the non-dealer, players alternately lay one card face up in front of themselves, announcing the running total of all cards played.",
+        "The running total may not exceed 31.",
+        "If you cannot play without exceeding 31, you say 'Go' and your opponent continues playing if able.",
+        "When neither can play, the last player to lay a card pegs 1 ('one for last'), or pegs 2 if they hit exactly 31. The count then resets to zero and play continues with remaining cards.",
+        "Continue rounds until both hands are exhausted."
+      ],
+      "scoringDuringPlay": [
+        "Fifteen: playing a card that makes the running total 15 pegs 2.",
+        "Thirty-one: making the total exactly 31 pegs 2.",
+        "Pair: playing a card matching the rank of the one just played pegs 2 (a 10 and a Queen are NOT a pair).",
+        "Pair royal: a third matching rank in a row pegs 6; double pair royal (fourth) pegs 12.",
+        "Run: completing a run of 3+ consecutive ranks (any suits, played within the current count, not necessarily in order) pegs the length of the run.",
+        "Last card: pegging 1 for playing the last card of a count (unless you made exactly 31)."
+      ],
+      "theShow": [
+        "After the play, players score their hands (the four cards they kept), and the start card counts as a fifth card belonging to every hand and to the crib.",
+        "Order: non-dealer's hand first, then dealer's hand, then the crib (which scores for the dealer).",
+        "Fifteen: each distinct combination of cards totaling 15 = 2 points.",
+        "Pairs: pair = 2, three of a kind = 6, four of a kind = 12.",
+        "Runs: each run of 3+ consecutive ranks scores its length; a card can count in multiple runs when duplicated ranks are present.",
+        "Flush: four hand cards of one suit = 4; if the start card matches too = 5. In the crib, a flush scores only if all five cards share a suit.",
+        "One for his nob: holding the Jack of the same suit as the start card = 1 point.",
+        "A single card may score in several combinations at once."
+      ],
+      "scoring": {
+        "type": "running-total",
+        "target": 121,
+        "unit": "points (pegs)",
+        "notes": [
+          "Points are pegged the instant they are earned, so the game can end mid-play or mid-show.",
+          "You do not need to land on 121 exactly; passing it wins.",
+          "Optional 'muggins': if a player misses points in their count, the opponent may claim them.",
+          "Optional 'skunk': a loser under a threshold (often 90, or 60) loses a double stake."
+        ]
+      },
+      "winning": "The first player to reach or pass 121 wins immediately, as long as the opponent has not already pegged out.",
+      "sourceUrl": "https://www.pagat.com/adders/crib6.html"
+    },
+    {
+      "id": "spite-and-malice",
+      "name": "Spite and Malice",
+      "aka": [
+        "Cat and Mouse"
+      ],
+      "origin": "USA",
+      "difficulty": 2,
+      "family": "Competitive patience",
+      "summary": "A turn-based patience duel: race to empty your face-down pay-off pile by feeding cards into shared centre stacks that run Ace up to Queen, while managing four personal side stacks for cards you can't yet use.",
+      "equipment": "Two standard 52-card decks shuffled together. Suits are ignored.",
+      "cardRanking": "Low to high: A 2 3 4 5 6 7 8 9 10 J Q. Kings are wild.",
+      "objective": "Be the first to play away every card of your 20-card pay-off pile onto the centre stacks.",
+      "setup": [
+        "Shuffle both decks together. Deal 20 cards face down to each player's pay-off pile and 5 cards to each player's hand.",
+        "Place the rest face down as a shared stock.",
+        "Turn the top card of each pay-off pile face up. The player showing the higher card goes first (reshuffle and re-flip on a tie)."
+      ],
+      "play": [
+        "Start your turn by drawing from the stock until your hand holds 5 cards.",
+        "Centre stacks must begin with an Ace and build upward in sequence (2, 3, ... up to Queen), suit ignored; at most three centre stacks exist at once.",
+        "You may play to the centre from your hand, the top of a side stack, or the top of your pay-off pile, making as many centre plays as you can.",
+        "Kings are wild and take whatever value continues a centre stack.",
+        "Playing a card onto one of your (up to four) side stacks ends your turn.",
+        "If you empty your hand without ending your turn, immediately draw five new cards and continue.",
+        "Completing a centre stack with a Queen removes it (shuffled back into stock), freeing space for a new one."
+      ],
+      "specialRules": [
+        "You may never move a pay-off card to a side stack, move cards between side stacks, or move cards off a centre stack.",
+        "The whole point is to keep exposing and shedding your pay-off pile's top card."
+      ],
+      "scoring": {
+        "type": "win-loss",
+        "target": null,
+        "unit": "games won",
+        "optionalPointScoring": [
+          "If you want a running score across games: the winner scores 5 points plus 1 for each card left in the opponent's pay-off pile.",
+          "First to an agreed target (e.g. 50) wins the match."
+        ]
+      },
+      "winning": "You win the instant you play the last card of your pay-off pile to a centre stack. If the stock runs out first, it is a draw (or, by common option, the player with fewer pay-off cards wins).",
+      "sourceUrl": "https://www.pagat.com/patience/spitemal.html"
+    },
+    {
+      "id": "escoba",
+      "name": "Escoba",
+      "aka": [
+        "Escoba de Quince",
+        "Escoba de 15"
+      ],
+      "origin": "Spain (also Argentina, Uruguay, Chile)",
+      "difficulty": 3,
+      "family": "Fishing games",
+      "summary": "A Spanish fishing game where you capture table cards by combining them with a card from your hand to total exactly 15; sweeping the whole table earns a bonus 'escoba'.",
+      "equipment": "A 40-card Spanish deck (suits: Coins, Cups, Batons, Swords; ranks 1-7 plus Sota, Caballo, Rey). A standard deck works if you remove the 8s, 9s and 10s and treat J/Q/K as 8/9/10.",
+      "cardValues": "1-7 = face value; Sota (Jack) = 8; Caballo (Horse/Queen) = 9; Rey (King) = 10.",
+      "objective": "Capture valuable cards over successive deals to score points, first to 21 wins.",
+      "setup": [
+        "Deal three cards to each player, then four cards face up to the table.",
+        "Place the remaining cards face down as the stock for later deals.",
+        "If the four opening table cards total exactly 15, the dealer captures them as an escoba (two escobas if they total 30)."
+      ],
+      "play": [
+        "On your turn, play one card face up to the table.",
+        "If your card plus any set of table cards totals exactly 15, you capture all of them (played card included), storing them face down like a trick.",
+        "You choose which valid combination to take when more than one exists; if your played card makes a capture you must take it.",
+        "If it captures nothing, the card simply stays on the table.",
+        "When all hands are empty, the dealer deals three fresh cards to each player (none to the table) and play continues until the deck is exhausted.",
+        "Any cards left on the table at the very end go to the last player who made a capture (this is not an escoba)."
+      ],
+      "specialRules": [
+        "Escoba (sweep): capturing every card on the table leaves it empty and scores a bonus point. Keep the sweeping card face up in your pile to tally sweeps."
+      ],
+      "scoring": {
+        "type": "running-total",
+        "target": 21,
+        "unit": "points",
+        "pointsPerDeal": [
+          "Cartas: 1 point for taking the majority of cards (no point if split 20-20).",
+          "Oros: 1 point for taking the most Coins cards (no point if split 5-5).",
+          "Siete de Velo: 1 point for capturing the 7 of Coins.",
+          "La Setenta (prime): 1 point for the best 'prime' — practically, the most sevens (with tie-breaks down through sixes, aces, etc.).",
+          "Escobas: 1 point for each sweep made."
+        ]
+      },
+      "winning": "The first player or team with 21 or more points at the end of a hand wins; ties are broken by playing further hands.",
+      "sourceUrl": "https://www.pagat.com/fishing/escoba.html"
+    },
+    {
+      "id": "cuttle",
+      "name": "Cuttle",
+      "aka": [],
+      "origin": "North America, 1970s",
+      "difficulty": 4,
+      "family": "Combat games",
+      "summary": "A duel-style card game, an early ancestor of games like Magic, where the same card can be a point, a weapon to destroy an opponent's points, or a special effect. First to 21 points of cards on the table wins.",
+      "equipment": "One standard 52-card deck, no jokers.",
+      "objective": "Be the first to have 21 or more points of point cards laid out on your side of the table.",
+      "setup": [
+        "Dealer deals six cards to themselves and five to the opponent.",
+        "The rest becomes a face-down draw pile; discards go face-up to a 'scrap pile'.",
+        "The dealer's opponent takes the first turn."
+      ],
+      "play": [
+        "On your turn you must do exactly ONE of: draw a card; play a point card; play a one-off effect; or play a permanent effect. Then your opponent goes.",
+        "Point card (A-10): laid face up to add to your total, OR played as a 'scuttle' to destroy an opponent's point card of lower value (ties broken by suit order clubs < diamonds < hearts < spades) — both cards go to scrap.",
+        "One-off effect (A-7, 9): resolved immediately then scrapped.",
+        "Permanent effect (8, J, Q, K): laid face up and stays in play.",
+        "If the draw pile is empty you may pass; three passes in a row ends the game with no winner."
+      ],
+      "cardEffects": {
+        "oneOff": [
+          "Ace: scrap all point cards on the table (both sides).",
+          "2: scrap any permanent effect card, OR counter an opponent's one-off as they play it.",
+          "3: take any card from the scrap pile into your hand.",
+          "4: opponent discards two cards of their choice.",
+          "5: draw two cards.",
+          "6: scrap all permanent effect cards (both sides).",
+          "7: draw a card and immediately play it."
+        ],
+        "permanent": [
+          "8 (played sideways, 'glasses'): opponent must play with their hand exposed.",
+          "Jack: attach to a point card to steal its control to your side.",
+          "Queen: protects your other cards from single-target effects (2, 9, Jack) but not from scuttling or wide effects.",
+          "King: lowers your points-to-win — one king 14, two 10, three 7, four 5.",
+          "9 (one-off): return any permanent card to its owner's hand."
+        ]
+      },
+      "scoring": {
+        "type": "instant-win",
+        "target": 21,
+        "unit": "points on table",
+        "notes": [
+          "'Score' is the sum of point-card values on your side of the table, not a cross-game tally.",
+          "Kings reduce your personal target (21 / 14 / 10 / 7 / 5 for 0-4 kings).",
+          "For a couples app, track a games-won tally across rounds."
+        ]
+      },
+      "winning": "You win the moment your point cards on the table reach your current target (21, or lower if you hold kings).",
+      "sourceUrl": "https://www.pagat.com/combat/cuttle.html"
+    },
+    {
+      "id": "schnapsen",
+      "name": "Schnapsen",
+      "aka": [
+        "Schnapser"
+      ],
+      "origin": "Austria",
+      "difficulty": 4,
+      "family": "Ace-Ten / Marriage group (point-trick)",
+      "summary": "A tense 20-card trick-taking duel where you race to 66 card points by winning valuable cards and declaring King-Queen 'marriages', with the pivotal decision of when to 'close' the deck.",
+      "equipment": "A 20-card pack: from a standard deck remove all cards 2 through 9, leaving A, 10, K, Q, J in each suit.",
+      "cardRanking": "High to low: Ace, Ten, King, Queen, Jack.",
+      "cardValues": "Ace = 11, Ten = 10, King = 4, Queen = 3, Jack = 2 (30 points per suit, 120 in the deck).",
+      "objective": "Be the first to reach 66 card points in a deal, and win game points across deals until you count down from 7 to 0.",
+      "setup": [
+        "Deal three cards each, turn the next card face up to set the trump suit, then deal two more each (five cards per player).",
+        "Stack the remaining cards face down across the face-up trump to form the talon; the trump card stays visible at the bottom."
+      ],
+      "play": [
+        "Non-dealer leads first. While the talon lasts there is NO obligation to follow suit.",
+        "A trick is won by the highest trump played, or if no trump, the highest card of the suit led.",
+        "The trick winner scores the two cards' point values toward 66, then draws the top talon card; the loser draws next. Winner leads to the next trick.",
+        "Once the talon is empty (or closed), strict rules apply: you must follow suit, must beat the led card if able, and must trump if void of the led suit."
+      ],
+      "specialActions": [
+        "Trump Jack exchange: when it is your turn to lead, you may swap the trump Jack for the higher face-up trump card (only while the talon is open).",
+        "Marriage: when leading, showing the King and Queen of a suit scores 20 (plain) or 40 (in trumps). You must lead one of the two cards, and the points only count once you have won a trick.",
+        "Closing: when on lead, either player may flip the trump card face down onto the talon, stopping all draws and committing to reach 66 from the hand under strict-play rules."
+      ],
+      "scoring": {
+        "type": "match-countdown",
+        "target": 0,
+        "startValue": 7,
+        "unit": "game points",
+        "gamePointsPerDeal": [
+          "A player who correctly claims 66+ scores: 1 game point if the opponent has 33+ card points; 2 if the opponent has a trick but under 33; 3 if the opponent won no trick (Schwarz).",
+          "A false claim of 66 gives the opponent 2 game points (3 if the opponent had no trick yet).",
+          "A player who closes and then fails to reach 66 gives the opponent 2 game points (3 if the opponent had no trick at the close).",
+          "If nobody closes or claims and the talon runs out, the winner of the last trick scores 1 game point."
+        ],
+        "notes": [
+          "Scores must be tracked mentally; writing them down is traditionally not allowed.",
+          "Both players start at 7 game points and subtract what they win; first to reach 0 wins the match (a 'Bummerl')."
+        ]
+      },
+      "winning": "Win individual deals by reaching 66 card points; win the match by counting your game-point score down from 7 to zero before your opponent.",
+      "sourceUrl": "https://www.pagat.com/marriage/schnaps.html"
+    },
+    {
+      "id": "sedma",
+      "name": "Sedma",
+      "aka": [
+        "Seven"
+      ],
+      "origin": "Czech Republic / Slovakia",
+      "difficulty": 3,
+      "family": "Sedma group (trick-taking)",
+      "summary": "A Czech trick game with an unusual twist: a card can only be beaten by another of the same rank as the lead, or by a seven (which is wild). You aim to capture aces and tens.",
+      "equipment": "A 32-card pack (A, K, Over/Queen, Under/Jack, 10, 9, 8, 7 in each suit). From a standard deck, remove 2s through 6s.",
+      "cardValues": "Each ace and each ten = 10 points; the last trick = 10 points; everything else = 0. Total 90 points per hand.",
+      "objective": "Capture the aces and tens (and the last trick) to score the most points, over a series of hands played for stakes.",
+      "setup": [
+        "Deal four cards to each player, then stack the rest face down as a draw pile.",
+        "In later hands the previous loser deals and the winner leads first."
+      ],
+      "play": [
+        "The player to the dealer's left leads any card; each other player then plays any card.",
+        "After everyone has played, the leader chooses either to END the trick or to CONTINUE it.",
+        "The trick is won by the LAST player who played either a card matching the rank of the lead card, or a seven.",
+        "To continue, the leader plays another card equal to the original lead or a seven; the others each add a card too. This can repeat for up to four rounds.",
+        "The winner collects all cards to a face-down pile, then everyone draws back up to four cards (winner first). The winner leads the next trick.",
+        "When the draw pile is exhausted, play out the remaining cards normally."
+      ],
+      "specialRules": [
+        "Sevens are effectively wild — a seven can win any trick.",
+        "You may keep extending a trick even when already winning it, to pressure opponents into surrendering aces or tens."
+      ],
+      "scoring": {
+        "type": "stake-based",
+        "target": null,
+        "unit": "stakes (or points to an agreed target)",
+        "perHand": [
+          "Count 10 for each ace and ten captured, plus 10 for the last trick (90 total).",
+          "Most points wins 1 stake.",
+          "Taking all 90 points (but not every trick) wins 2 stakes.",
+          "Winning every trick wins 3 stakes."
+        ],
+        "notes": [
+          "A common option: record stakes as points and play to a target such as 10."
+        ]
+      },
+      "winning": "Win each hand by capturing the most points; win the match by accumulating the most stakes (or reaching an agreed points target).",
+      "sourceUrl": "https://www.pagat.com/sedma/sedma.html"
+    },
+    {
+      "id": "twenty",
+      "name": "Twenty",
+      "aka": [],
+      "origin": "Invented game (Brian Stovel, 2009)",
+      "difficulty": 2,
+      "family": "Adding games",
+      "summary": "A quick, skilful adding game: players take turns pushing a shared count up one at a time from 1 to 20 by playing cards that hit each exact total, aiming to shed their hand or be left holding the least.",
+      "equipment": "One standard 52-card deck.",
+      "countValues": "Ace = 1; 2-9 = face value; 10, J, Q = 10 (but a matched pair of tens, jacks or queens may count as 10 rather than 20); King is wild, worth any amount from 1 to 20.",
+      "objective": "Be the first to get rid of all your cards, or hold the lowest-value hand when someone makes the count of 20.",
+      "setup": [
+        "Deal 7 cards to each player; stack the rest face down as a draw pile.",
+        "With two players, the player opposite the dealer begins and turns alternate."
+      ],
+      "play": [
+        "A shared count starts at 1 and rises by 1 each time a player 'makes the count'.",
+        "On your turn you must either draw one card, OR make the current count by playing a single card equal to it or a set of cards that sum to it exactly.",
+        "You may always choose to draw instead of making the count, even if you could make it; if you cannot make it, you must draw.",
+        "The count climbs only when it is actually made, so a number may sit for several turns.",
+        "The hand ends when a player empties their hand, or when someone makes the count of 20."
+      ],
+      "scoring": {
+        "type": "penalty-to-limit",
+        "target": 100,
+        "unit": "penalty points",
+        "perHand": [
+          "At the end of a hand, each player scores penalty points for cards still in hand:",
+          "Cards Ace-9 = 5 penalty each.",
+          "Any 10, J or Q = 10 penalty each.",
+          "Kings = 20 penalty each."
+        ],
+        "notes": [
+          "Two-player game ends when a player reaches 100 penalty points; lowest total wins. Use 200 for 3-4 players."
+        ]
+      },
+      "winning": "The player with the FEWER penalty points when someone reaches 100 wins the game.",
+      "sourceUrl": "https://www.pagat.com/invented/20.html"
+    },
+    {
+      "id": "james-bond",
+      "name": "James Bond",
+      "aka": [
+        "Atlantis",
+        "Chanhassen",
+        "Lannen nopein"
+      ],
+      "origin": "USA (modern children's game)",
+      "difficulty": 1,
+      "family": "Commerce group / matching",
+      "summary": "A fast, real-time race with no turns: both players simultaneously swap cards between their face-down piles and a shared row of face-up cards, trying to make every pile four of a kind first.",
+      "equipment": "One standard 52-card deck, no jokers.",
+      "objective": "Be the first to turn all six of your piles into four-of-a-kind sets.",
+      "setup": [
+        "Deal the deck into face-down piles of four cards: six piles in front of each player (for two players).",
+        "Place the final four cards face up in a row between the players."
+      ],
+      "play": [
+        "On 'Go!', both players play at the same time — there are no turns.",
+        "Pick up one pile, look at its four cards, and optionally swap one card with one of the face-up table cards.",
+        "You may only look at one pile at a time; put it back face down before picking up another.",
+        "Only one card may be swapped at a time, and there must always be four cards in each pile and four face up on the table.",
+        "Aim to gather four cards of the same rank in each pile."
+      ],
+      "scoring": {
+        "type": "win-loss",
+        "target": null,
+        "unit": "games won",
+        "notes": [
+          "There is no point score — it is a straight race. Track a games-won tally across rounds."
+        ]
+      },
+      "winning": "The first player to have four matching cards in every one of their six piles shouts 'James Bond' and reveals them to win.",
+      "sourceUrl": "https://www.pagat.com/commerce/jamesbond.html"
+    },
+    {
+      "id": "porrazo",
+      "name": "Porrazo",
+      "aka": [
+        "Parosso",
+        "Parear",
+        "Contra Parazzo"
+      ],
+      "origin": "Mexico / southwestern USA",
+      "difficulty": 3,
+      "family": "Fishing games",
+      "summary": "A lively fishing game full of little scoring flourishes: capture table cards by matching rank, grab bonus points for matching the card the previous player just laid down (a 'porrazo'), and declare pairs in hand for extra points.",
+      "equipment": "One standard 52-card deck, no jokers. Cards rank Ace (low) to King (high); suits do not matter. A cribbage board helps because points are scored throughout.",
+      "objective": "Reach 61 cumulative points first by capturing cards and scoring the game's many bonuses.",
+      "setup": [
+        "Deal three cards to each player; keep the rest face down.",
+        "Once during their turn as dealer (after any three-card deal, before players look), the dealer lays four cards face up as the 'tendido' and scores it.",
+        "After each round of three cards is played out, deal three more, until the deck runs out."
+      ],
+      "play": [
+        "On your turn, play one card face up.",
+        "If it matches the rank of a card on the table, capture both (plus any cards in an unbroken ascending run above the matched card; sequences turn the corner K-A-2).",
+        "If it matches nothing, it stays on the table for others to capture."
+      ],
+      "declarations": [
+        "Ronda / Rondine: after looking at a new three-card hand, announce (without showing) if you hold a pair (ronda) or three of a kind (rondine). The highest declared set scores after the cards are played."
+      ],
+      "scoring": {
+        "type": "running-total",
+        "target": 61,
+        "unit": "points",
+        "scoringEvents": [
+          "Porrazo: matching the card the previous player just played (when it captured nothing) scores by rank — King 4, Queen 3, Jack 2, others 1.",
+          "Counter porrazo: matching a porrazo card scores triple (K 12, Q 9, J 6, others 3) and cancels the porrazo.",
+          "San Benito: playing the fourth of a kind after a counter porrazo wins the whole game outright.",
+          "Ronda scores K 4 / Q 3 / J 2 / other 1; Rondine scores triple those; any rondine beats any ronda.",
+          "Cards in place: playing an Ace/2/3/4 (without capturing) so the table holds exactly that many cards scores that value.",
+          "Limpia (sweep): clearing the whole table scores by the rank of the last card taken (K 4 / Q 3 / J 2 / other 1).",
+          "Tendido: the dealer scores for Aces-4s landing in matching positions in the layout, plus any matched sets.",
+          "Most cards captured overall scores the difference between the two sides' card counts (a common option halves this by scoring cards over 26)."
+        ]
+      },
+      "winning": "The first player or team to reach 61 or more points wins, which can happen mid-deal.",
+      "sourceUrl": "https://www.pagat.com/fishing/porrazo.html"
+    },
+    {
+      "id": "yaniv",
+      "name": "Jhyap (Yaniv)",
+      "aka": [
+        "Yaniv",
+        "Jhyap",
+        "Dhumbal",
+        "Kluft"
+      ],
+      "origin": "Nepal (popularized in Israel)",
+      "difficulty": 2,
+      "family": "Draw and discard",
+      "summary": "A quick draw-and-discard game where you shed cards by dumping rummy-like sets and runs, aiming for a low hand. When you think you're lowest, you call 'Yaniv' to end the round — but if someone ties or beats you, you take a big penalty.",
+      "equipment": "A 54-card deck (standard deck plus two jokers). Use two decks for larger groups.",
+      "cardValues": "Ace = 1; 2-10 = face value; J/Q/K = 10; Joker = 0.",
+      "objective": "Keep your cumulative score as low as possible; players who exceed the limit (commonly 200) are eliminated until one remains.",
+      "setup": [
+        "Deal five cards to each player. Place the rest face down as a draw stock and turn one card face up to start the discard ('dump') pile."
+      ],
+      "play": [
+        "On your turn, do ONE of two things: (a) discard then draw, or (b) call 'Yaniv' to end the round.",
+        "To discard, throw either a single card, a set of equal ranks, or a run of 3+ in the same suit (aces low; a joker can fill a run).",
+        "However many cards you throw, you draw exactly ONE card — either the top of the stock or an end card of what the previous player just discarded.",
+        "Unlike rummy, you discard BEFORE you draw."
+      ],
+      "ending": [
+        "At the START of your turn, if your hand totals 5 points or fewer and you believe it is the lowest, you may call 'Yaniv'.",
+        "Everyone then reveals their hands and scores."
+      ],
+      "scoring": {
+        "type": "penalty-elimination",
+        "target": 200,
+        "unit": "penalty points (low is good)",
+        "perRound": [
+          "If the caller truly has the lowest hand, they score 0 and everyone else scores their hand value.",
+          "If anyone ties or beats the caller ('Asaf'), the caller scores 30 penalty points plus their hand, and all others score their hand values too."
+        ],
+        "notes": [
+          "Landing exactly on certain totals reduces your score (commonly: exactly 200 -> 100, exactly 100 -> 50), which players sometimes aim for.",
+          "Exceed 200 and you are eliminated."
+        ]
+      },
+      "winning": "The last player remaining after all others exceed the point limit wins. (Low score is good.)",
+      "sourceUrl": "https://www.pagat.com/draw/yaniv.html"
+    },
+    {
+      "id": "durak-perevodnoy",
+      "name": "Durak (Perevodnoy)",
+      "aka": [
+        "Transfer Durak",
+        "Perevodnoy Durak"
+      ],
+      "origin": "Russia / Ukraine / Belarus",
+      "difficulty": 3,
+      "family": "Beating games",
+      "summary": "The classic Russian 'fool' game where you attack your opponent with cards they must beat, drawing back up to six after each bout. This transfer variant adds a twist: instead of defending, you can bounce an attack back by playing a matching rank. The last player left holding cards loses.",
+      "equipment": "A 36-card pack (A K Q J 10 9 8 7 6 in each suit), ace high.",
+      "objective": "Get rid of all your cards. The last player still holding cards is the loser (the 'Durak').",
+      "setup": [
+        "Deal six cards to each player.",
+        "Turn the next card face up; its suit is trumps for the whole deal. Place the remaining stock on top of it, leaving the trump card visible underneath.",
+        "The player with the lowest trump usually attacks first."
+      ],
+      "play": [
+        "The attacker plays a card face up. The defender must 'beat' it by playing a higher card of the same suit, or any trump (a trump can only be beaten by a higher trump).",
+        "After the first attack card is dealt with, the attacker (and, in multiplayer, others) may throw in more cards, but only of ranks already present in the bout, up to six cards total.",
+        "If the defender beats everything, all those cards are discarded out of play. If the defender cannot or will not beat them, they pick up all the cards on the table.",
+        "After each bout, players draw back up to six cards from the stock (attacker first), while the stock lasts.",
+        "If the defender beat the attack, they become the next attacker; if they picked up, the attack passes onward."
+      ],
+      "transferRule": [
+        "The distinctive feature: instead of beating the attack, if the defender holds a card of the SAME RANK as the attack card, they may play it to 'transfer' the whole attack to the next player, becoming the attacker themselves.",
+        "The new defender may in turn add another equal-rank card to pass it along further.",
+        "You cannot transfer an attack onto someone who does not have enough cards left to defend it.",
+        "Once an attack card has been beaten, that attack can no longer be transferred."
+      ],
+      "scoring": {
+        "type": "win-loss",
+        "target": null,
+        "unit": "games won",
+        "notes": [
+          "There is no point score — you simply avoid being the last one holding cards. Track a games-won (or games-lost/'fool') tally."
+        ]
+      },
+      "winning": "You 'win' by emptying your hand and going out. In a two-player game the first to shed all cards wins and the other is the Durak.",
+      "sourceUrl": "https://www.pagat.com/beating/perevodnoy_durak.html"
+    },
+    {
+      "id": "oceans-eleven",
+      "name": "Ocean's Eleven",
+      "aka": [],
+      "origin": "Invented game (Eliott Adkins)",
+      "difficulty": 3,
+      "family": "Poker-based / invented",
+      "summary": "A clever two-player poker duel with no betting: each player has their own 52-card deck and reveals cards one at a time to build competing poker hands. The player who's behind must either add a card or concede. First to win 6 of 11 hands takes it.",
+      "equipment": "Two standard 52-card decks, one per player. Twos are wild; hands rank as in standard poker.",
+      "objective": "Be the first to win 6 poker hands.",
+      "setup": [
+        "Each player shuffles their own deck and flips the top card face up to begin their first hand.",
+        "Compare the two face-up hands."
+      ],
+      "play": [
+        "Whenever cards are revealed, compare each player's best poker hand.",
+        "The player with the WEAKER hand must choose: deal another card to their own row to try to improve, or concede the hand.",
+        "If the hands are equal, both players must deal another card.",
+        "This repeats until someone concedes. The winner keeps a marker to track hands won; both discard their used cards (out of play for good).",
+        "There is no limit on how many cards the trailing player may deal, except that running out of cards forces a concession."
+      ],
+      "comparingHands": [
+        "Each player makes their best five-card poker hand from their row.",
+        "With fewer than five cards, missing slots count as worthless non-cards (so a bare pair beats an incomplete higher hand only per normal ranking).",
+        "You may not have two identical cards in your row, so there is no five-of-a-kind and a flush holds only one ace.",
+        "If best hands tie and someone has extra cards, the surplus forms a second hand to break the tie."
+      ],
+      "scoring": {
+        "type": "best-of-series",
+        "target": 6,
+        "unit": "hands won",
+        "notes": [
+          "Best of 11 hands; first to 6 wins. If both decks run out, most hands won wins (a tie is a draw)."
+        ]
+      },
+      "winning": "The first player to win 6 hands wins the game.",
+      "sourceUrl": "https://www.pagat.com/invented/oceans11.html"
+    },
+    {
+      "id": "panjpar",
+      "name": "Panjpar",
+      "aka": [
+        "Five Cards"
+      ],
+      "origin": "Afghanistan",
+      "difficulty": 3,
+      "family": "Beating games",
+      "summary": "An Afghan two-player 'beating' game (featured in The Kite Runner) played through a series of attacks and defenses. You keep a five-card hand while the stock lasts, then race to shed your cards in the endgame. Whoever is left holding cards loses.",
+      "equipment": "One standard 52-card deck. Cards rank A (high) down to 2.",
+      "objective": "Be the one to play out all your cards after the stock runs out; the player still holding cards is the loser.",
+      "setup": [
+        "Deal five cards to each player. Turn the next card face up to set trumps, then stack the stock face down across it so the trump card stays visible.",
+        "One player guesses the trump colour; a correct guess earns the first attack."
+      ],
+      "play": [
+        "Play is a series of battles: one player attacks, the other defends.",
+        "An attack is 1, 3, or 5 cards: a single card; a pair plus one; or two pairs plus one.",
+        "To defend, beat an attack card with a higher card of the same suit, or any trump (trumps only beaten by higher trumps). You beat each attack card with one card placed on top.",
+        "Beaten cards (and the cards that beat them) are set aside for the rest of the deal. Beat everything and you attack next.",
+        "You may always choose to pick up attack cards into your hand instead of beating them — often worth it to grab aces or big trumps. Any unbeaten cards go to the defender's hand and the same player attacks again.",
+        "While the stock lasts, refill to five cards after each battle (attacker draws first)."
+      ],
+      "endgame": [
+        "The face-up trump is the last card drawn from the stock; after that, no more drawing.",
+        "You may not attack with more cards than your opponent holds.",
+        "When a player empties their hand at the end of a battle, play ends and the player still holding cards loses. If both empty their hands in the same final battle, it is a draw."
+      ],
+      "scoring": {
+        "type": "win-loss",
+        "target": null,
+        "unit": "games won",
+        "notes": [
+          "No point score — you avoid being the last holding cards. Track a games-won tally."
+        ]
+      },
+      "winning": "You win by being first to get rid of all your cards once the stock is exhausted.",
+      "sourceUrl": "https://www.pagat.com/beating/panjpar.html"
+    },
+    {
+      "id": "casino-swazi",
+      "name": "Casino (Swazi)",
+      "aka": [
+        "Swazi Casino"
+      ],
+      "origin": "Eswatini (Swaziland) / southern Africa",
+      "difficulty": 4,
+      "family": "Fishing games (Casino / Royal Casino)",
+      "summary": "A southern African version of Casino where every card has a capture value, captured cards are kept face up, and — the distinctive twist — you can pull the top card off an opponent's capture pile to help build your own combinations. Rich, tactical fishing game centered on high-value builds.",
+      "equipment": "One standard 52-card deck.",
+      "cardValues": "2-10 = face value; Jack = 11; Queen = 12; King = 13; Ace = 1 or 14 (chosen when used).",
+      "objective": "Capture the most valuable cards over the deal to score the most of the 11 available points.",
+      "setup": [
+        "Two-player version: the non-dealer cuts four cards from the middle of the deck face up to form the layout, then the dealer deals 12 cards to each player (another 12 each after these are played).",
+        "During your first 12 cards you may not discard without capturing while you own a build, and you may not end a turn owning more than one build; these restrictions lift for the second 12."
+      ],
+      "play": [
+        "On your turn you must play exactly one card from your hand, used for one of: capturing, changing a build's value, or discarding to the layout.",
+        "Capture ('chow'): play a card matching a single layout card, a set of layout cards summing to it, or a build of that value — you may take several matches at once.",
+        "Single build: combine layout cards (optionally plus a hand card) into a pile of a single total value you can later capture; you become its owner.",
+        "Change a build: add one hand card to an OPPONENT's single build to a new value you can capture, taking ownership.",
+        "Augment a build: add same-value cards/sets to your own build, using layout cards, one hand card, and/or the top card of an opponent's capture pile.",
+        "Discard: leave a non-capturing card in the layout.",
+        "Only the top card of an opponent's capture pile is ever available, and only to augment a build — never captured directly."
+      ],
+      "specialRules": [
+        "There can never be two builds of the same value on the table at once.",
+        "You cannot break up or merge builds into a higher value, and augmented builds can't have their value changed.",
+        "Whoever makes the last capture sweeps up any remaining layout cards at the end."
+      ],
+      "scoring": {
+        "type": "running-total",
+        "target": 21,
+        "unit": "points",
+        "pointsPerDeal": [
+          "Most cards captured: 2 points (1 each if tied).",
+          "Most spades: 2 points (1 each if tied).",
+          "Two of spades ('spy two'): 1 point.",
+          "Ten of diamonds ('big ten'): 2 points.",
+          "Each ace: 1 point.",
+          "(11 points total available per deal; no bonus for sweeps.)"
+        ],
+        "notes": [
+          "Play multiple deals to an agreed target such as 21."
+        ]
+      },
+      "winning": "The player (or team) who first reaches the agreed cumulative points target wins.",
+      "sourceUrl": "https://www.pagat.com/fishing/african_casino.html#swazi"
+    },
+    {
+      "id": "all-fives",
+      "name": "All Fives",
+      "aka": [
+        "Muggins",
+        "Five Up",
+        "Single Spinner"
+      ],
+      "origin": "USA (widely considered the standard American domino game)",
+      "difficulty": 3,
+      "family": "Domino game (Fives family, cross layout)",
+      "isDominoes": true,
+      "summary": "A domino game, not a card game: you score whenever the open ends of the cross-shaped layout add up to a multiple of five. Fast to play but strategically rich.",
+      "equipment": "A double-six domino set (28 tiles). A cribbage board is handy for scoring.",
+      "objective": "Score points during play by making the layout ends total a multiple of five, racing to an agreed target.",
+      "setup": [
+        "For two players, deal 9 tiles each (hand sizes vary by house rule); the rest form the boneyard.",
+        "First hand: choose the opener by lot. Afterward, whoever went out ('dominoed') leads next."
+      ],
+      "play": [
+        "The opener plays any tile; each player then plays a tile matching a free end of the layout.",
+        "If you cannot play, draw from the boneyard until you can (or it is empty, then pass). If you can play, you must.",
+        "Doubles are placed crosswise and count their full pip total while at the end of an arm.",
+        "The first double played is the 'spinner': the layout can branch into a cross from it, so up to four ends can be open."
+      ],
+      "scoring": {
+        "type": "running-total",
+        "target": 250,
+        "unit": "points",
+        "duringPlay": [
+          "After you place a tile, add up all the open ends of the layout.",
+          "If that total is a multiple of 5 (5, 10, 15, ... up to 35), you immediately score it.",
+          "A double at an end contributes both halves (e.g. 5-5 counts 10)."
+        ],
+        "endOfHand": [
+          "Whoever goes out first (or, if blocked, holds the fewest pips) wins the hand.",
+          "They score the opponents' remaining pip total, rounded to the nearest 5."
+        ],
+        "notes": [
+          "Very common option: divide all scores by 5 and play to 61 on a cribbage board.",
+          "Two-player target is usually 250 (200 for 3-4 players)."
+        ]
+      },
+      "winning": "The first player or team to reach the agreed target (e.g. 250, or 61 on a cribbage board) wins.",
+      "sourceUrl": "https://www.pagat.com/domino/cross/all_fives.html"
+    },
+    {
+      "id": "go-stop",
+      "name": "Go Stop",
+      "aka": [
+        "Godori (related)"
+      ],
+      "origin": "Korea",
+      "difficulty": 4,
+      "family": "Fishing game (flower cards / hwatu)",
+      "summary": "The best-known Korean flower-card game. You capture cards from a shared layout by matching months, build scoring combinations, and — once you reach the target score — face the game's signature choice: 'Stop' and collect, or 'Go' to gamble for more while risking that your opponent wins instead.",
+      "equipment": "A pack of Korean flower cards (hwatu): 48 cards, four per month (12 months), plus 1-2 jokers. Cards fall into brights (kwang), animals (yul), ribbons (tti) and junk (pi).",
+      "objective": "Collect scoring combinations, reach the agreed target, and choose the right moment to Stop for maximum payment.",
+      "setup": [
+        "Two players: deal 10 cards to each player and 8 face up to the centre layout (dealt in the pattern 5/5/4, 5/5/4). Remaining cards form a face-down stock.",
+        "Before play, check for special starts: four of one month on the table voids the deal; four of one month in hand is an instant win; three of a month on the table forms a single capturable stack.",
+        "The dealer plays first; winner of each hand deals the next."
+      ],
+      "play": [
+        "A turn = play one card from your hand to the layout, then flip the top stock card to the layout.",
+        "Cards capture by matching the same month. If your played card matches a layout card, pair them; the flipped stock card may capture too.",
+        "If your played card matches nothing, it stays; the flipped stock card may still capture a match.",
+        "Captured cards go face up to your capture area, grouped by type.",
+        "Special captures (clearing the table, taking all four of a month, capturing your played card with the stock draw, or taking a three-stack) make each opponent hand you a junk card."
+      ],
+      "specialActions": [
+        "Heundeum ('shaking'): declaring three of a month in hand for a bonus if you go on to win.",
+        "Bomb (potkan): playing three of a month at once to grab the fourth from the table.",
+        "Jokers: played straight to your capture area; you then flip a replacement stock card."
+      ],
+      "scoring": {
+        "type": "stop-or-go",
+        "target": 7,
+        "unit": "points / chips",
+        "combinations": [
+          "Brights: 5 = 15 pts; 4 = 4; 3 without the rain bright = 3; 3 with rain = 2.",
+          "Animals: 5 = 1 pt, +1 per extra; 'godori' (Feb+Apr+Aug birds) = 5.",
+          "Ribbons: any 5 = 1 pt, +1 per extra; each special 3-ribbon set (red-with-poems, blue, plain-red) = 3.",
+          "Junk: 10 = 1 pt, +1 per extra (special junk count double)."
+        ],
+        "stopOrGo": [
+          "When your score first reaches the agreed target (commonly 7 for two players) at the end of your turn, you must say 'Stop' (end and collect) or 'Go' (continue).",
+          "After a 'Go', you can only stop again once your score has increased beyond its value at the last 'Go'.",
+          "Saying 'Go' and then failing to improve before the cards run out ('nagari') means no payment and doubled stakes next deal."
+        ],
+        "multipliers": [
+          "Each 'Go' adds to and eventually doubles the payment.",
+          "Doublers apply for a bright set vs. an opponent with none, seven+ animals, a junk set vs. an opponent with few, and for declared heundeum."
+        ]
+      },
+      "winning": "The player who says 'Stop' after reaching the target collects chips equal to their score (times any multipliers) from each opponent, regardless of the others' scores.",
+      "sourceUrl": "https://www.pagat.com/fishing/gostop.html"
+    },
+    {
+      "id": "tartli",
+      "name": "Tartli",
+      "aka": [
+        "Felsos",
+        "Tartl (Austrian)"
+      ],
+      "origin": "Hungary (also Austria)",
+      "difficulty": 4,
+      "family": "Jass group (trick-and-draw, point-trick with melds)",
+      "summary": "A rich Hungarian trick-and-draw game where you both fight for valuable cards in tricks and collect and declare melds — sequences and four-of-a-kinds — as you assemble them during play. First to 501 card points wins the deal.",
+      "equipment": "A 32-card German-suited (Hungarian 'Tell') pack. With a standard deck, use Queens for Overs and Jacks for Unders and remove the 2s-6s.",
+      "cardRankingForSequences": "High to low: Ace, King, Over, Under, Ten, Nine, Eight, Seven.",
+      "cardValues": {
+        "trump": "Over (20), Nine (14), Ace (11), Ten (10), King (4), Under (2), Eight (0), Seven (0).",
+        "nonTrump": "Ace (11), Ten (10), King (4), Over (3), Under (2), Nine/Eight/Seven (0).",
+        "note": "Last trick worth an extra 10; 161 card points total in the deck."
+      },
+      "objective": "Reach 501 card points (over successive deals) by winning valuable tricks and declaring melds.",
+      "melds": [
+        "Sequences (3+ consecutive in a suit): Terc (3) = 20, Kvart (4) = 50, Kvint or longer (5-8) = 100.",
+        "Sets of four equal cards (not 8s/7s): Unders/Kings/Tens/Aces = 100, Nines = 150, Overs = 200.",
+        "Bela: King + Over of trumps = 40, scored independently and never beaten by other melds.",
+        "In any trick only the player with the single highest declared meld actually scores (any set beats any sequence; longer/higher sequences win)."
+      ],
+      "setup": [
+        "Deal 9 cards to each player in packets of three. Turn the next card for trumps and stack the remaining 14 cards (the talon) crosswise over it.",
+        "Non-dealer leads first."
+      ],
+      "play": [
+        "Tricks are won by the highest trump, or the highest card of the led suit if no trump is played.",
+        "First 7 tricks: no need to follow suit. After each, the trick winner draws the top talon card, then the loser draws, keeping 9-card hands.",
+        "Before leading (first 7 tricks) the leader may swap the trump Seven for the trump indicator.",
+        "During the first 8 tricks, before playing, a player may declare up to one set and one sequence they hold; only the higher declaration scores that trick.",
+        "From the 8th trick on (talon empty), strict rules apply: follow suit, and trump if unable to follow (Hungarian rules); no obligation to win the trick."
+      ],
+      "scoring": {
+        "type": "running-total",
+        "target": 501,
+        "unit": "card points (then 'buli' victory points)",
+        "perDeal": [
+          "Total the card values won in tricks; the last-trick winner adds 10 (both players' totals sum to 161).",
+          "Winning all of the last 9 tricks ('stichmatsch') forfeits the opponent's tricks: 161 to 0.",
+          "Meld points are added as declared during play."
+        ],
+        "matchScoring": [
+          "First to 501 total card points scores 1 buli point (2, a 'maccs', if the opponent is under 251); then card points reset.",
+          "A player may 'go out' and claim the win the moment they reach 501; a false claim hands the buli to the opponent."
+        ]
+      },
+      "winning": "Win each deal by being first to 501 card points; win the session by reaching an agreed number of buli points (commonly 5 or 10).",
+      "sourceUrl": "https://www.pagat.com/jass/tartli.html"
+    },
+    {
+      "id": "clobyosh",
+      "name": "Clobyosh",
+      "aka": [
+        "Bela",
+        "Klabberjass",
+        "Kalabrias",
+        "Clob",
+        "Klaberyass"
+      ],
+      "origin": "Widespread (Jewish communities, Scotland, USA); related to French Belote",
+      "difficulty": 5,
+      "family": "Jass group (point-trick with melds)",
+      "summary": "Widely rated one of the most skilful two-player card games. A trick-taking game where you bid to set trumps, score for sequences and the trump King-Queen ('Bela'), and capture point cards — but if you take on trumps and lose, all your points go to your opponent.",
+      "equipment": "A 32-card pack (remove 2s-6s from a standard deck).",
+      "cardValues": {
+        "nonTrump": "Ace 11, Ten 10, King 4, Queen 3, Jack 2, others 0.",
+        "trump": "Jack ('Yuss') 20, Nine ('Manel') 14, Ace 11, Ten 10, King 4, Queen 3, Eight/Seven 0."
+      },
+      "objective": "Be first to reach 501 total points over several hands, from captured card points, sequences, Bela, and the last trick.",
+      "combinations": [
+        "Run of four in a suit ('fifty') = 50; run of three ('twenty') = 20 (sequence order A-K-Q-J-10-9-8-7).",
+        "Only the holder of the single best run scores runs; ties favor higher top card, then trump, then who declared first.",
+        "Bela = King + Queen of trumps = 20, declared as played and always counts.",
+        "A sequence only counts if its holder wins at least one trick."
+      ],
+      "setup": [
+        "Deal 6 cards to each player (in two packets of three) and turn the next card up as the proposed trump.",
+        "Bidding: the non-dealer ('forehand') may 'take' the turned suit as trumps or 'pass'. If both pass, forehand may name a different trump suit, then the dealer; if all options are declined, redeal.",
+        "Once trumps are set, deal three more cards each (nine-card hands). The holder of the trump Seven may exchange it for the trump indicator."
+      ],
+      "play": [
+        "Forehand leads first. You must follow suit; if you can't, you must trump; when a trump is led you must beat it if able. Trick-taking power follows the point-value order above.",
+        "Declarations of sequences happen on the first trick, using a stylized back-and-forth so the loser reveals little; the winner shows and scores on the second trick.",
+        "Bela is announced as its two cards are played ('Bela' / 'from the Bela').",
+        "The winner of each trick leads to the next; the last trick is worth 10."
+      ],
+      "scoring": {
+        "type": "running-total",
+        "target": 501,
+        "unit": "points",
+        "perHand": [
+          "Each player totals captured card points plus their scored combinations plus the 10 for last trick.",
+          "The non-taking defender's points are always safe.",
+          "If the trump-maker (taker) fails to beat the opponent's total, they are 'bate' — all their points go to the opponent.",
+          "Equal scores are held over and go to the winner of the next completed hand."
+        ]
+      },
+      "winning": "First to 501 wins. You may claim victory the instant you reach 501 mid-hand (after winning a trick); an unclaimed 501 can be overtaken, and a false claim forfeits the game. Usually played best of three.",
+      "sourceUrl": "https://www.pagat.com/jass/bela.html"
+    },
+    {
+      "id": "piquet",
+      "name": "Piquet",
+      "aka": [
+        "Rubicon Piquet"
+      ],
+      "origin": "France / Britain, 16th century",
+      "difficulty": 5,
+      "family": "No-trump trick-taking with combinations",
+      "summary": "A classic, deeply strategic two-player game barely changed since the 1500s. Across a six-deal 'partie' you improve your hand from a talon, score for the best point (longest suit), sequence, and set, then play out no-trump tricks. Rich in declaration bluffing and precise card play.",
+      "equipment": "A 32-card pack (remove 2s-6s). Cards rank 7 8 9 10 J Q K A (high).",
+      "objective": "Score more points than your opponent over a partie of six deals; also aim to pass 100 points to avoid the 'Rubicon' penalty.",
+      "roles": "The non-dealer is 'elder hand' (leads and declares first, a real advantage); the dealer is 'younger hand'. Deal alternates.",
+      "setup": [
+        "Deal 12 cards to each player, leaving an 8-card talon face down.",
+        "Carte blanche: a hand with no court cards scores 10 (announced and shown).",
+        "Exchange: elder hand discards 1-5 cards (usually 5) and draws that many from the top of the talon; younger hand then discards 1 up to the cards remaining (usually 3) and draws to match."
+      ],
+      "declarations": [
+        "Point: most cards in one suit — scores that many points.",
+        "Sequence: longest run of 3+ in a suit — tierce (3) = 3, quart (4) = 4, quint (5) = 15, sixieme (6) = 16, septieme (7) = 17, huitieme (8) = 18.",
+        "Set: quatorze (four Aces/Kings/Queens/Jacks/Tens) = 14; trio (three of those) = 3.",
+        "Only the holder of the best combination in each category scores it (and may then also score their lesser combinations in that category). Declarations use a 'good / not good / equal' exchange that reveals as little as possible. You may 'sink' (not declare) a combination for tactical reasons."
+      ],
+      "play": [
+        "Trick play with NO trumps; you must follow suit.",
+        "Score 1 for leading a card, 1 for winning a trick led by the opponent, and 1 extra for the last trick.",
+        "The player winning more tricks scores 10 for 'the cards' (40 for 'capot' if they win all 12); no score if tricks split 6-6."
+      ],
+      "bonuses": [
+        "Repique: scoring 30 in declarations alone before the opponent scores anything in declarations = +60.",
+        "Pique: scoring 30 in declarations and play before the opponent scores at all = +30 (only elder hand can make a pique)."
+      ],
+      "scoring": {
+        "type": "partie-total",
+        "target": null,
+        "unit": "points over 6 deals",
+        "notes": [
+          "Players announce a running per-hand total as they score; hand totals accumulate across the partie.",
+          "Winner is whoever has more after 6 deals (extra hands if tied).",
+          "Rubicon: if the loser reached 100+, they pay the difference + 100; if the loser failed to reach 100, they pay the SUM of both scores + 100."
+        ]
+      },
+      "winning": "Win the partie by having the higher total after six deals.",
+      "sourceUrl": "https://www.pagat.com/notrump/piquet.html"
+    }
+  ]
+}
