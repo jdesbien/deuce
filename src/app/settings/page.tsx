@@ -3,8 +3,11 @@ import { redirect } from "next/navigation";
 
 import { CoupleManager } from "@/app/settings/CoupleManager";
 import { ProfileForm } from "@/app/settings/ProfileForm";
+import { ManageSubscriptionButton } from "@/app/upgrade/ManageSubscriptionButton";
+import { brand } from "@/config/brand";
 import { getCouple, getPartnerProfile } from "@/lib/queries/couples";
 import { getCurrentUser } from "@/lib/queries/profiles";
+import { getIsPro } from "@/lib/queries/subscriptions";
 
 export const metadata = { title: "Settings" };
 
@@ -17,6 +20,7 @@ export default async function SettingsPage() {
   const partner = profile.couple_id
     ? await getPartnerProfile(profile.couple_id, profile.id)
     : null;
+  const isPro = await getIsPro();
 
   return (
     <div className="mx-auto max-w-xl px-4 py-10">
@@ -60,6 +64,33 @@ export default async function SettingsPage() {
               Your streak ♥
             </Link>
           </div>
+        </section>
+
+        <section className="rounded-2xl border border-line bg-card p-5">
+          <h2 className="mb-1 text-lg font-bold">
+            {isPro ? `${brand.name} Pro ♥` : "Go ad-free"}
+          </h2>
+          {isPro ? (
+            <>
+              <p className="mb-4 text-sm text-ink-soft">
+                You&apos;re Pro — no ads, ever. Thank you for supporting the
+                app.
+              </p>
+              <ManageSubscriptionButton />
+            </>
+          ) : (
+            <>
+              <p className="mb-4 text-sm text-ink-soft">
+                Remove every ad for $3.99/month or $14.99/year.
+              </p>
+              <Link
+                href="/upgrade"
+                className="block w-full rounded-xl bg-accent px-4 py-3 text-center font-semibold text-white hover:bg-accent-strong"
+              >
+                See Pro
+              </Link>
+            </>
+          )}
         </section>
 
         <section className="rounded-2xl border border-line bg-card p-5">

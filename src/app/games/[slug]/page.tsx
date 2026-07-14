@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { StickyAdBanner } from "@/components/ads/AdSlot";
 import { GameCard } from "@/components/games/GameCard";
 import {
   difficultyLabel,
@@ -370,6 +371,8 @@ export default async function GamePage(props: PageProps<"/games/[slug]">) {
           Start the scorekeeper →
         </Link>
       </div>
+
+      <StickyAdBanner aboveMobileCta />
     </div>
   );
 }

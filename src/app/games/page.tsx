@@ -1,3 +1,4 @@
+import { StickyAdBanner } from "@/components/ads/AdSlot";
 import { GameCard } from "@/components/games/GameCard";
 import { getAllGames, getSourceCredit } from "@/lib/content/games";
 
@@ -25,6 +26,8 @@ export default function GamesPage() {
       </div>
 
       <p className="mt-10 text-xs text-ink-soft">{getSourceCredit()}</p>
+
+      <StickyAdBanner />
     </div>
   );
 }
