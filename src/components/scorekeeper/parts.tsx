@@ -9,7 +9,7 @@ import type {
   ScorekeeperConfig,
 } from "@/lib/scoring/engine";
 
-/** Player accent colors: player 1 = card red, player 2 = felt green. */
+/** Player accent colors: player 1 = rosewood, player 2 = terracotta. */
 export const PLAYER_STYLES = [
   {
     ring: "border-primary",
@@ -18,10 +18,10 @@ export const PLAYER_STYLES = [
     soft: "bg-primary-soft",
   },
   {
-    ring: "border-felt",
-    text: "text-felt",
-    button: "bg-felt hover:bg-felt/85",
-    soft: "bg-felt-soft",
+    ring: "border-accent",
+    text: "text-accent-strong",
+    button: "bg-accent hover:bg-accent-strong",
+    soft: "bg-accent-soft",
   },
 ] as const;
 

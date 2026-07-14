@@ -1,53 +1,55 @@
 import Link from "next/link";
 
 import { GameCard } from "@/components/games/GameCard";
-import { brand } from "@/config/brand";
 import { getFeaturedGames } from "@/lib/content/games";
 
 const steps = [
   {
-    title: "Pick a game",
-    body: "Browse clear, skimmable rules for classic two-player card games. No account needed.",
+    title: "Pick a game together",
+    body: "Skimmable rules for 20 two-player games, easiest first. No account needed to start.",
     glyph: "♠",
   },
   {
-    title: "Keep score together",
-    body: "Open a scoreboard built for that game — big buttons made for passing one phone across the table.",
+    title: "Play across the table",
+    body: "One phone, big buttons, made to pass back and forth. Phones-down mode keeps the feeds out of it.",
     glyph: "♥",
   },
   {
-    title: "Build your rivalry",
-    body: "Link up with your partner to sync scores live and track your all-time head-to-head record.",
+    title: "Grow the ritual",
+    body: "Link up to keep a streak of game nights, earn badges together, and unlock connection prompts.",
     glyph: "♣",
   },
 ] as const;
 
-export default async function HomePage() {
-  const featured = await getFeaturedGames();
+export default function HomePage() {
+  const featured = getFeaturedGames();
 
   return (
     <div className="mx-auto max-w-5xl px-4">
       {/* Hero */}
       <section className="flex flex-col items-center gap-6 py-16 text-center sm:py-24">
-        <p className="rounded-full bg-felt-soft px-4 py-1.5 text-sm font-medium text-felt">
+        <p className="rounded-full bg-accent-soft px-4 py-1.5 text-sm font-medium text-accent-strong">
           Free · No signup needed to play
         </p>
         <h1 className="max-w-2xl text-4xl font-bold tracking-tight sm:text-5xl">
-          {brand.tagline}, scores settled forever.
+          Put the phones down. Deal the cards.
         </h1>
-        <p className="max-w-xl text-lg text-ink-soft">{brand.description}</p>
+        <p className="max-w-xl text-lg text-ink-soft">
+          Learn a game together, keep score on one phone, and turn any night
+          into a date. Twenty two-player games, made for two.
+        </p>
         <div className="flex flex-col gap-3 sm:flex-row">
           <Link
             href="/games"
-            className="rounded-xl bg-primary px-6 py-3.5 text-base font-semibold text-white shadow-sm hover:bg-primary-strong"
+            className="rounded-xl border border-line bg-card px-6 py-3.5 text-base font-semibold hover:border-ink-soft"
           >
             Browse the games
           </Link>
           <Link
-            href="/signup"
-            className="rounded-xl border border-line bg-card px-6 py-3.5 text-base font-semibold hover:border-ink-soft"
+            href="/games"
+            className="rounded-xl bg-accent px-6 py-3.5 text-base font-semibold text-white shadow-sm hover:bg-accent-strong"
           >
-            Create a free account
+            Start date night ♥
           </Link>
         </div>
       </section>
@@ -76,16 +78,21 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Featured games (empty until the library is seeded) */}
+      {/* Featured games */}
       {featured.length > 0 && (
         <section aria-labelledby="featured-games" className="py-10">
-          <div className="mb-4 flex items-baseline justify-between">
-            <h2 id="featured-games" className="text-xl font-bold">
-              Featured games
-            </h2>
+          <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
+            <div>
+              <h2 id="featured-games" className="text-xl font-bold">
+                Featured games
+              </h2>
+              <p className="text-sm text-ink-soft">
+                Easy ones to start your first night.
+              </p>
+            </div>
             <Link
               href="/games"
-              className="text-sm font-medium text-primary hover:text-primary-strong"
+              className="text-sm font-medium text-accent-strong hover:text-primary"
             >
               See all →
             </Link>
@@ -99,15 +106,15 @@ export default async function HomePage() {
       )}
 
       {/* Closing CTA */}
-      <section className="my-16 rounded-3xl bg-felt px-6 py-12 text-center text-white">
+      <section className="my-16 rounded-3xl bg-primary px-6 py-12 text-center text-white">
         <h2 className="text-2xl font-bold">Deck&apos;s already on the table?</h2>
         <p className="mx-auto mt-2 max-w-md text-white/80">
-          Jump straight into a scoreboard — you can save the result later if
-          you want bragging rights on record.
+          Jump straight into a scoreboard — save the result to your streak and
+          keep your story going.
         </p>
         <Link
           href="/games"
-          className="mt-6 inline-block rounded-xl bg-white px-6 py-3.5 font-semibold text-felt hover:bg-white/90"
+          className="mt-6 inline-block rounded-xl bg-white px-6 py-3.5 font-semibold text-primary hover:bg-white/90"
         >
           Start playing now
         </Link>

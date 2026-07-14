@@ -44,7 +44,7 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith("/admin") ||
     pathname.startsWith("/settings") ||
     pathname.startsWith("/history") ||
-    pathname.startsWith("/rivalry");
+    pathname.startsWith("/streak");
 
   if (!user && requiresAuth) {
     const url = request.nextUrl.clone();

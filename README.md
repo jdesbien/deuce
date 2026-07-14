@@ -1,7 +1,12 @@
-# Deuce — card games for two
+# Cards4Couples — card games for two, made for closeness
 
-Rules and live scoreboards for two-player card games. Next.js (App Router) +
-TypeScript + Tailwind CSS + Supabase (Postgres, Auth, Realtime, RLS).
+A card-game night for two that pulls you off your phones and toward each
+other: clear rules, shared scoreboards, and (soon) streaks and badges for
+couples. Next.js (App Router) + TypeScript + Tailwind CSS + Supabase
+(Postgres, Auth, Realtime, RLS).
+
+> The repo folder is still `deuce/` from the original working name; only
+> the branding changed.
 
 Branding (name, tagline, logo glyph) lives in `src/config/brand.ts`; colors
 live in the `@theme` block of `src/app/globals.css`.

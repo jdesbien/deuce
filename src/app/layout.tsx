@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -7,20 +7,20 @@ import { brand } from "@/config/brand";
 
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(brand.siteUrl),
   title: {
-    default: `${brand.name} — ${brand.tagline}`,
+    default: `${brand.name} — ${brand.tagline.toLowerCase()}`,
     template: `%s · ${brand.name}`,
   },
   description: brand.description,
@@ -38,7 +38,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="flex min-h-dvh flex-col">
         <Header />

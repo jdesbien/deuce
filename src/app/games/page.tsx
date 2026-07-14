@@ -4,7 +4,7 @@ import { getAllGames, getSourceCredit } from "@/lib/content/games";
 export const metadata = {
   title: "Game library",
   description:
-    "Rules and scorekeepers for 20 two-player card and domino games — Gin Rummy, Cribbage, Schnapsen, Yaniv, and more.",
+    "20 two-player card and domino games with clear rules and shared scoreboards — a date night you can start tonight.",
 };
 
 export default function GamesPage() {

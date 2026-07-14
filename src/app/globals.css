@@ -3,32 +3,49 @@
 /*
  * Theme tokens. These are the single source of truth for colors —
  * `src/config/brand.ts` holds the name/voice, this block holds the look.
- * Palette: warm paper background, playing-card red primary, felt green
- * accent. All pairings meet WCAG AA on their intended surfaces.
+ *
+ * Cards4Couples palette: warm cream base, rosewood primary, terracotta
+ * accent for CTAs, blush surfaces, muted gold badges. Warm light theme
+ * is the default (an optional dim "candlelight" mode can come later).
  */
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), Georgia, serif;
+  --font-mono: ui-monospace, monospace;
 
-  --color-surface: #faf7f2;
+  --color-surface: #faf4ec;
   --color-card: #ffffff;
-  --color-ink: #211c17;
-  --color-ink-soft: #675e54;
-  --color-line: #e7e0d5;
+  --color-ink: #2b2422;
+  --color-ink-soft: #6e625c;
+  --color-line: #eadfd2;
 
-  --color-primary: #b02a37;
-  --color-primary-strong: #8e1f2b;
-  --color-primary-soft: #f9ebec;
+  /* Rosewood / wine — primary brand */
+  --color-primary: #7a2e3a;
+  --color-primary-strong: #5c2029;
+  --color-primary-soft: #f4d9d0; /* soft blush */
 
-  --color-felt: #2e6b4f;
-  --color-felt-soft: #e7f0eb;
+  /* Warm terracotta — CTAs, highlights, player 2 */
+  --color-accent: #e07a5f;
+  --color-accent-strong: #c05a3e;
+  --color-accent-soft: #fbeae3;
 
-  --color-gold: #a9761f;
-  --color-gold-soft: #f7efdd;
+  /* Muted gold — badges, gentle accents */
+  --color-gold: #8f6b23;
+  --color-gold-soft: #f4e8cd;
+
+  /* Hearts/diamonds suit red (logo mark, card motifs) */
+  --color-suit: #b3323f;
 }
 
 body {
   background: var(--color-surface);
   color: var(--color-ink);
   font-family: var(--font-sans);
+}
+
+/* Warm editorial serif for headings; UI stays in the sans. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
 }

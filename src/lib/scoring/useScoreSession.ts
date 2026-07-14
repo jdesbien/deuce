@@ -10,8 +10,8 @@ import {
   type PlayerIndex,
 } from "@/lib/scoring/engine";
 
-const NAMES_KEY = "deuce:players";
-const sessionKey = (slug: string) => `deuce:score:${slug}`;
+const NAMES_KEY = "c4c:players";
+const sessionKey = (slug: string) => `c4c:score:${slug}`;
 
 interface StoredSession {
   version: 1;

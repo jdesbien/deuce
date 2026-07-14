@@ -13,7 +13,7 @@ export function Footer() {
     <footer className="border-t border-line bg-card">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-3 px-4 py-8 text-sm text-ink-soft sm:flex-row sm:justify-between">
         <p>
-          <span aria-hidden className="mr-1 text-primary">
+          <span aria-hidden className="mr-1 text-suit">
             {brand.logoGlyph}
           </span>
           {brand.name} — {brand.tagline.toLowerCase()}

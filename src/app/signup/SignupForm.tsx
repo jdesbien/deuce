@@ -54,7 +54,7 @@ export function SignupForm() {
     return (
       <div
         role="status"
-        className="rounded-2xl border border-line bg-felt-soft p-6 text-center"
+        className="rounded-2xl border border-line bg-accent-soft p-6 text-center"
       >
         <p className="mb-1 text-2xl" aria-hidden>
           ✉️

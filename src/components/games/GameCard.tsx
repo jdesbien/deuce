@@ -4,8 +4,8 @@ import { difficultyLabel } from "@/lib/content/games";
 import type { ContentGame } from "@/lib/content/types";
 
 const difficultyStyles = {
-  Easy: "bg-felt-soft text-felt",
-  Medium: "bg-gold-soft text-gold",
+  Easy: "bg-gold-soft text-gold",
+  Medium: "bg-accent-soft text-accent-strong",
   Hard: "bg-primary-soft text-primary-strong",
 } as const;
 

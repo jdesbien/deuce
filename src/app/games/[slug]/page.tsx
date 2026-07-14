@@ -175,8 +175,8 @@ const NAV = [
 ] as const;
 
 const difficultyChip: Record<string, string> = {
-  Easy: "bg-felt-soft text-felt",
-  Medium: "bg-gold-soft text-gold",
+  Easy: "bg-gold-soft text-gold",
+  Medium: "bg-accent-soft text-accent-strong",
   Hard: "bg-primary-soft text-primary-strong",
 };
 
@@ -307,7 +307,7 @@ export default async function GamePage(props: PageProps<"/games/[slug]">) {
           <h2 className="mb-3 text-xl font-bold">
             <span aria-hidden className="mr-2 text-primary">♦</span>Scoring
           </h2>
-          <p className="mb-4 rounded-xl bg-felt-soft px-4 py-3 text-sm font-medium text-felt">
+          <p className="mb-4 rounded-xl bg-accent-soft px-4 py-3 text-sm font-medium text-accent-strong">
             Scored in {game.scoring.unit}
             {game.scoring.target !== null &&
               ` · ${game.scoring.startValue !== undefined ? `count down from ${game.scoring.startValue} to ${game.scoring.target}` : `play to ${game.scoring.target}`}`}
