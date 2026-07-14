@@ -5,6 +5,7 @@ import { CoupleManager } from "@/app/settings/CoupleManager";
 import { ProfileForm } from "@/app/settings/ProfileForm";
 import { ManageSubscriptionButton } from "@/app/upgrade/ManageSubscriptionButton";
 import { brand } from "@/config/brand";
+import { isStripeConfigured } from "@/lib/billing/stripe";
 import { getCouple, getPartnerProfile } from "@/lib/queries/couples";
 import { getCurrentUser } from "@/lib/queries/profiles";
 import { getIsPro } from "@/lib/queries/subscriptions";
@@ -66,6 +67,8 @@ export default async function SettingsPage() {
           </div>
         </section>
 
+        {/* Hidden while billing is shelved (no Stripe keys configured). */}
+        {(isPro || isStripeConfigured()) && (
         <section className="rounded-2xl border border-line bg-card p-5">
           <h2 className="mb-1 text-lg font-bold">
             {isPro ? `${brand.name} Pro ♥` : "Go ad-free"}
@@ -92,6 +95,7 @@ export default async function SettingsPage() {
             </>
           )}
         </section>
+        )}
 
         <section className="rounded-2xl border border-line bg-card p-5">
           <h2 className="mb-4 text-lg font-bold">Account</h2>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
 
 import { ConsentBanner } from "@/components/ads/ConsentBanner";
+import { AnnouncementBanner } from "@/components/layout/AnnouncementBanner";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { brand } from "@/config/brand";
@@ -43,6 +44,7 @@ export default function RootLayout({
     >
       <body className="flex min-h-dvh flex-col">
         <Header />
+        <AnnouncementBanner />
         <main className="flex-1">{children}</main>
         <Footer />
         <ConsentBanner />

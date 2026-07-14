@@ -4,6 +4,7 @@ import { brand } from "@/config/brand";
 
 const footerLinks = [
   { href: "/games", label: "Games" },
+  { href: "/feedback", label: "Feedback" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
 ] as const;

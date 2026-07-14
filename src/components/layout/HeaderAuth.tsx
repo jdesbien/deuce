@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/client";
 interface HeaderProfile {
   display_name: string;
   avatar_emoji: string;
+  role: "user" | "admin";
 }
 
 type AuthState =
@@ -47,13 +48,17 @@ export function HeaderAuth() {
         }
         const { data: profile } = await supabase
           .from("profiles")
-          .select("display_name, avatar_emoji")
+          .select("display_name, avatar_emoji, role")
           .eq("id", user.id)
           .maybeSingle();
         if (cancelled) return;
         setState({
           status: "authed",
-          profile: profile ?? { display_name: "Player", avatar_emoji: "♥" },
+          profile: profile ?? {
+            display_name: "Player",
+            avatar_emoji: "♥",
+            role: "user",
+          },
         });
       } catch (err) {
         // Never leave the nav invisible — fall back to guest links.
@@ -144,6 +149,16 @@ export function HeaderAuth() {
               >
                 Settings
               </Link>
+              {state.profile.role === "admin" && (
+                <Link
+                  href="/admin"
+                  role="menuitem"
+                  className={itemClass}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  🛠 Admin
+                </Link>
+              )}
               <div aria-hidden className="my-1 h-px bg-line" />
               <form action="/auth/signout" method="post">
                 <button
