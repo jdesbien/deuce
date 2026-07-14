@@ -1,65 +1,117 @@
-import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+import { GameCard } from "@/components/games/GameCard";
+import { brand } from "@/config/brand";
+import { getFeaturedGames } from "@/lib/queries/games";
+
+const steps = [
+  {
+    title: "Pick a game",
+    body: "Browse clear, skimmable rules for classic two-player card games. No account needed.",
+    glyph: "♠",
+  },
+  {
+    title: "Keep score together",
+    body: "Open a scoreboard built for that game — big buttons made for passing one phone across the table.",
+    glyph: "♥",
+  },
+  {
+    title: "Build your rivalry",
+    body: "Link up with your partner to sync scores live and track your all-time head-to-head record.",
+    glyph: "♣",
+  },
+] as const;
+
+export default async function HomePage() {
+  const featured = await getFeaturedGames();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="mx-auto max-w-5xl px-4">
+      {/* Hero */}
+      <section className="flex flex-col items-center gap-6 py-16 text-center sm:py-24">
+        <p className="rounded-full bg-felt-soft px-4 py-1.5 text-sm font-medium text-felt">
+          Free · No signup needed to play
+        </p>
+        <h1 className="max-w-2xl text-4xl font-bold tracking-tight sm:text-5xl">
+          {brand.tagline}, scores settled forever.
+        </h1>
+        <p className="max-w-xl text-lg text-ink-soft">{brand.description}</p>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Link
+            href="/games"
+            className="rounded-xl bg-primary px-6 py-3.5 text-base font-semibold text-white shadow-sm hover:bg-primary-strong"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Browse the games
+          </Link>
+          <Link
+            href="/signup"
+            className="rounded-xl border border-line bg-card px-6 py-3.5 text-base font-semibold hover:border-ink-soft"
           >
-            Documentation
-          </a>
+            Create a free account
+          </Link>
         </div>
-      </main>
+      </section>
+
+      {/* How it works */}
+      <section aria-labelledby="how-it-works" className="py-10">
+        <h2 id="how-it-works" className="sr-only">
+          How it works
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {steps.map((step) => (
+            <div
+              key={step.title}
+              className="rounded-2xl border border-line bg-card p-6"
+            >
+              <span
+                aria-hidden
+                className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-xl text-primary"
+              >
+                {step.glyph}
+              </span>
+              <h3 className="mb-1 font-semibold">{step.title}</h3>
+              <p className="text-sm text-ink-soft">{step.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Featured games (empty until the library is seeded) */}
+      {featured.length > 0 && (
+        <section aria-labelledby="featured-games" className="py-10">
+          <div className="mb-4 flex items-baseline justify-between">
+            <h2 id="featured-games" className="text-xl font-bold">
+              Featured games
+            </h2>
+            <Link
+              href="/games"
+              className="text-sm font-medium text-primary hover:text-primary-strong"
+            >
+              See all →
+            </Link>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {featured.map((game) => (
+              <GameCard key={game.id} game={game} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Closing CTA */}
+      <section className="my-16 rounded-3xl bg-felt px-6 py-12 text-center text-white">
+        <h2 className="text-2xl font-bold">Deck&apos;s already on the table?</h2>
+        <p className="mx-auto mt-2 max-w-md text-white/80">
+          Jump straight into a scoreboard — you can save the result later if
+          you want bragging rights on record.
+        </p>
+        <Link
+          href="/games"
+          className="mt-6 inline-block rounded-xl bg-white px-6 py-3.5 font-semibold text-felt hover:bg-white/90"
+        >
+          Start playing now
+        </Link>
+      </section>
     </div>
   );
 }
