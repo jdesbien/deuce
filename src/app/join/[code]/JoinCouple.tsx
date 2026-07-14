@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { clearPendingInvite } from "@/lib/couples/pendingInvite";
 import { createClient } from "@/lib/supabase/client";
 
 export function JoinCouple({ code }: { code: string }) {
@@ -20,6 +21,7 @@ export function JoinCouple({ code }: { code: string }) {
         setError(rpcError.message);
         return;
       }
+      clearPendingInvite();
       router.push("/streak");
       router.refresh();
     } catch (err) {

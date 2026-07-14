@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { clearPendingInvite } from "@/lib/couples/pendingInvite";
 import { createClient } from "@/lib/supabase/client";
 
 export function CoupleManager({
@@ -53,6 +54,7 @@ export function CoupleManager({
         code: joinCode,
       });
       if (rpcError) throw new Error(rpcError.message);
+      clearPendingInvite();
     });
   }
 

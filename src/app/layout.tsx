@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
 
 import { ConsentBanner } from "@/components/ads/ConsentBanner";
+import { PendingInviteRedeemer } from "@/components/couples/PendingInviteRedeemer";
 import { AnnouncementBanner } from "@/components/layout/AnnouncementBanner";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -59,6 +60,7 @@ export default function RootLayout({
         <Footer />
         <ConsentBanner />
         <ServiceWorkerRegistrar />
+        <PendingInviteRedeemer />
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { JoinCouple } from "@/app/join/[code]/JoinCouple";
+import { StorePendingInvite } from "@/app/join/[code]/StorePendingInvite";
 import { getCurrentUser } from "@/lib/queries/profiles";
 
 export const metadata = {
@@ -15,6 +16,8 @@ export default async function JoinPage(props: PageProps<"/join/[code]">) {
 
   return (
     <div className="mx-auto max-w-sm px-4 py-12 text-center">
+      {/* Only remember codes that could still be redeemed. */}
+      {!current?.profile?.couple_id && <StorePendingInvite code={normalized} />}
       <p aria-hidden className="mb-2 text-4xl">
         ♥
       </p>
