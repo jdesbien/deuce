@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
 
 import { ConsentBanner } from "@/components/ads/ConsentBanner";
 import { AnnouncementBanner } from "@/components/layout/AnnouncementBanner";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { ServiceWorkerRegistrar } from "@/components/pwa/ServiceWorkerRegistrar";
 import { brand } from "@/config/brand";
 
 import "./globals.css";
@@ -30,6 +31,15 @@ export const metadata: Metadata = {
     siteName: brand.name,
     type: "website",
   },
+  appleWebApp: {
+    capable: true,
+    title: brand.name,
+    statusBarStyle: "default",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#faf4ec",
 };
 
 export default function RootLayout({
@@ -48,6 +58,7 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <ConsentBanner />
+        <ServiceWorkerRegistrar />
       </body>
     </html>
   );
